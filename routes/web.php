@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\HomeController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ItemController;
 /*
@@ -22,3 +23,5 @@ Auth::routes();
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
 Route::resource('items', ItemController::class);
+//Route::get('/login', [HomeController::class, 'login'])->name('login');
+//Route::get('/register', [HomeController::class, 'register'])->name('register');
