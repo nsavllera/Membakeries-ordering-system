@@ -15,10 +15,13 @@
 
     <!-- Scripts -->
     @vite(['resources/sass/app.scss', 'resources/js/app.js'])
+
+    <!-- Styles-->
+    <link href="{{ url('/css/style.css') }}" type="text/css" rel="stylesheet">
 </head>
 <body>
     <div id="app">
-        <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
+        <nav class="navbar navbar-expand-md navbar-light shadow-sm">
             <div class="container">
                 <a class="navbar-brand" href="{{ url('/') }}">
                     {{ config('app.name', 'Laravel') }}
@@ -92,7 +95,7 @@
                         </ul>
                     </div>
                     </div>
-                    <div class="col-md-10">
+                    <div class="col-md-10" style="background-color: #FEF9F2;">
                         @yield('content')
                     </div>
                 </div>

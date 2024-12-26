@@ -1,9 +1,9 @@
-@extends('layouts.app')
+@extends('layouts.master')
 
 @section('content')
 <div class="card">
-	<div class="card-header">
-		Add an Item
+	<div class="card-header" style="text-align:left;">
+		<h5 class="mb-0">Add Items</h5>
 	</div>
 	<div class="card-body">
 		@if (session("message"))
@@ -15,7 +15,7 @@
 
     	<form method="POST" action="{{ route('items.store') }}" enctype="multipart/form-data">
 		@csrf
-			<table class="table">
+			<table class="table custom-table">
 				<tr>
 					<td>Item name</td>
 					<td>
@@ -95,8 +95,9 @@
 					</td>
 				</tr>
 			</table>
-
+			
 		</form>
 
 	</div>
 </div>
+@endsection
