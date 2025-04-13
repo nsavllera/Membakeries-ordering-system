@@ -37,17 +37,15 @@
 				<tr>
 					<td>Category</td>
 					<td>
-                        <select name="category" class="form-control">
-							<option value="">-- Select Category --</option>
-							<option value="Cake" {{ old('category') == 'Cake' ? 'selected' : '' }}>Cake</option>
-                            <option value="Cookie" {{ old('category') == 'Cookie' ? 'selected' : '' }}>Cookie</option>
-                            <option value="Pudding" {{ old('category') == 'Pudding' ? 'selected' : '' }}>Pudding</option>
-                            <option value="Pie" {{ old('category') == 'Pie' ? 'selected' : '' }}>Pie</option>
-                            <option value="Raya Series" {{ old('category') == 'Raya Series' ? 'selected' : '' }}>Raya Series</option>
-						</select>
-						@error('category')
-							<span class="text-danger">{{ $message }}</span>
-						@enderror
+					<select name="category_id" class="form-control">
+						<option value="">-- Select Category --</option>
+						@foreach ($categories as $category)
+                                <option value="{{ $category->id }}">{{ $category->name }}</option>
+                     	@endforeach
+					</select>
+					@error('category_id')
+						<span class="text-danger">{{ $message }}</span>
+					@enderror
 					</td>
 				</tr>
         		<tr>

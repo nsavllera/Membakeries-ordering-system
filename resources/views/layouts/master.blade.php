@@ -80,18 +80,18 @@
 
                 <div class="row">
                     <div class="col-md-2">
-                        <a href="#" class="btn btn-primary w-100 mb-2">Dashboard</a>
+                        <a href="{{ route('home')}}" class="btn btn-primary w-100 mb-2">Dashboard</a>
                         <a href="{{ route('items.index')}}" class="btn btn-primary w-100 mb-2">Manage Catalogue</a>
-                        <a href="#" class="btn btn-primary w-100 mb-2">Order List</a>
-                        <a href="#" class ="btn btn-primary w-100 mb-2">Delivery Schedule</a>
+                        <a href="{{route('order.index')}}" class="btn btn-primary w-100 mb-2">Order List</a>
+                        <a href="{{route('schedule.index')}}" class ="btn btn-primary w-100 mb-2">Delivery Schedule</a>
                     <div class="dropdown">
                         <button class="btn btn-primary w-100 mb-2 dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
                             Reports
                         </button>
                         <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                            <li><a class="dropdown-item" href="#">Order Report</a></li>
-                            <li><a class="dropdown-item" href="#">Product Report</a></li>
-                            <li><a class="dropdown-item" href="#">Sale Report</a></li>
+                            <li><a class="dropdown-item" href="{{route('report.orderreport.index')}}">Order Report</a></li>
+                            <li><a class="dropdown-item" href="{{route('report.inventoryreport.index')}}">Product Report</a></li>
+                            <li><a class="dropdown-item" href="{{route('report.salesreport.index')}}">Sales Report</a></li>
                         </ul>
                     </div>
                     </div>

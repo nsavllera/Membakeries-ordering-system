@@ -3,8 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Item;
+use App\Models\Category;
 use Illuminate\Http\Request;
-use Intervention\Image\Facades\Image;
+use IcehouseVentures\LaravelChartjs\Facades\Chartjs;
 
 class ItemController extends Controller
 {
@@ -14,8 +15,9 @@ class ItemController extends Controller
     public function index()
     {
         //
-        $items = Item::paginate(10);
-        return view("items.index", compact("items"));
+        $cakes = Item::with(['category:id,name'])->get();
+        return view('items.index', compact('cakes'));
+
     }
 
     /**
@@ -23,7 +25,8 @@ class ItemController extends Controller
      */
     public function create()
     {
-        return view('items.create');
+        $categories = Category::all();
+        return view('items.create', compact('categories'));
     }
 
     /**
@@ -35,43 +38,18 @@ class ItemController extends Controller
         $validated_data= $request->validate([
             'name'=> 'required|string|max:255',
             'description'=> 'nullable|string|max:255',
-            'category'=> 'required|string|in:Cake,Cookie,Pudding,Pie,Raya Series',
-            'price'=> 'required|float',
+            'category_id' => 'required|exists:categories,id',
+            'price'=> 'required|numeric|min:1',
             'image_path'=> 'nullable|image|mimes:jpeg,png,jpg|max:2048',
-            'created_at'=> 'required|datetime',
-            'updated_at'=> 'required|datetime',
+            'created_at'=> 'required|date',
+            'updated_at'=> 'required|date',
             ]);
     
         // Check if a image_path was uploaded
         if ($request->hasFile('image_path')) {
-            $image = $request->file('image_path');
-            $image_name = 'item_' . time() . '.' . $image->getClientOriginalExtension();
-
-            // Set directory path and create directory if it doesn't exist
-            $directory = public_path('uploads/items');
-            if (!file_exists($directory)) {
-                mkdir($directory, 0755, true);
-            }
-
-            // Resize the image to 300x300 using GD
-            $resized_image = imagecreatetruecolor(300, 300);
-            $source_image = ($image->getClientOriginalExtension() == 'png') ? imagecreatefrompng($image->getRealPath()) : imagecreatefromjpeg($image->getRealPath());
-            list($width, $height) = getimagesize($image->getRealPath());
-            imagecopyresampled($resized_image, $source_image, 0, 0, 0, 0, 300, 300, $width, $height);
-
-            // Save the image
-            if ($image->getClientOriginalExtension() == 'png') {
-                imagepng($resized_image, $directory . '/' . $image_name);
-            } else {
-                imagejpeg($resized_image, $directory . '/' . $image_name, 80); // 80 for JPEG quality
-            }
-
-            // Clean up resources
-            imagedestroy($resized_image);
-            imagedestroy($source_image);
-
-            // Store the image path in the validated data
-            $validated_data['image_path'] = $image_name;
+            $imageName = time() . '.' . $request->image_path->extension();
+            $request->image_path->move(public_path('images'), $imageName);
+            $validated_data['image_path'] = $imageName;
         }
 
         // Store the validated data in the 'Items' table
@@ -93,24 +71,63 @@ class ItemController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Item $item)
+    public function edit($id)
     {
-        //
+        $item = Item::findOrFail($id);
+        $categories = Category::all();
+        return view('items.edit', compact('item', 'categories'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Item $item)
+    public function update(Request $request, $id)
     {
-        //
+        $validated_data= $request->validate([
+            'name'=> 'required|string|max:255',
+            'description'=> 'nullable|string|max:255',
+            'category_id' => 'required|exists:categories,id',
+            'price'=> 'required|numeric|min:1',
+            'image_path'=> 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+            'created_at'=> 'required|date',
+            'updated_at'=> 'required|date',
+            ]);
+    
+        // Check if a image_path was uploaded
+        if ($request->hasFile('image_path')) {
+            $imageName = time() . '.' . $request->image_path->extension();
+            $request->image_path->move(public_path('images'), $imageName);
+            $validated_data['image_path'] = $imageName;
+        }
+
+        // Store the validated data in the 'Items' table
+        Item::create($validated_data);
+
+        // Redirect with a success message
+        return redirect()->back()->with('message', 'Item Update successfully!');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Item $item)
+    public function destroy($id)
     {
-        //
+        $item = Item::findOrFail($id);
+        $item->delete();
+
+        return redirect()->route('items.index')->with('success', 'Product item deleted successfully.');
+    }
+
+    /*public function search(Request $request)
+    {
+    $search = $request->input('search');
+    $results = Item::where('name', 'like', "%$search%")->get();
+
+    return view('items.index', ['results' => $results]);
+    }*/
+    public function showChart()
+    {
+    
+
     }
 }

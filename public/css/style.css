@@ -72,7 +72,6 @@ a:hover {
 }
 
 
-
 /* Change background color for the navbar */
 .navbar {
     background-color: #4a382a;
@@ -124,3 +123,16 @@ main {
     text-align: left;
 }
 
+.jumbotron{
+    border-style: outset;
+    border-color: #e9c2c2;
+    background-color: #FFF7D1;
+    border-radius: 12px;
+
+}
+
+    .jumbotron .p{
+        margin-left: 20px;;
+        color: #34261c;
+        text-align: left;
+    }

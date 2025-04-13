@@ -14,12 +14,13 @@ return new class extends Migration
         Schema::create('items', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->text('desciption')->nullable();
-            $table->string('category');
+            $table->string('description')->nullable();
             $table->float('price');
             $table->string('image_path');
             $table->dateTime('created_at');
             $table->dateTime('updated_at');
+            $table->unsignedBigInteger('category_id')->nullable();
+            $table->foreign('category_id')->references('id')->on('categories')->onDelete('set null');
         });
     }
 
