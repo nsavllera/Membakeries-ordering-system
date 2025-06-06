@@ -20,7 +20,7 @@
 				<tr>
 					<td>Item name</td>
 					<td>
-						<input type="text" name="name" value="{{ old('name') }}" class="form-control">
+						<input type="text" name="name" value="{{ old('name', $item->name) }}" class="form-control">
 						@error('name')
 							<span class="text-danger">{{ $message }}</span>
 						@enderror
@@ -29,7 +29,7 @@
 				<tr>
 					<td>Description</td>
 					<td>
-						<input type="text" name="description" value="{{ old('description') }}" class="form-control">
+						<input type="text" name="description" value="{{ old('description', $item->description) }}">
 						@error('description')
 							<span class="text-danger">{{ $message }}</span>
 						@enderror
@@ -40,9 +40,11 @@
 					<td>
 					<select name="category_id" class="form-control">
 						<option value="">-- Select Category --</option>
-						@foreach ($categories as $category)
-                                <option value="{{ $category->id }}">{{ $category->name }}</option>
-                     	@endforeach
+						  @foreach ($categories as $category)
+							<option value="{{ $category->id }}" {{ old('category_id', $item->category_id) == $category->id ? 'selected' : '' }}>
+								{{ $category->name }}
+							</option>
+						@endforeach
 					</select>
 					@error('category_id')
 						<span class="text-danger">{{ $message }}</span>
@@ -52,7 +54,7 @@
         		<tr>
 					<td>Price</td>
 					<td>
-						<input type="text" name="price" value="{{ old('price') }}" class="form-control">
+						<input type="text" name="price" value="{{ old('price', $item->price) }}">
 						@error('price')
 							<span class="text-danger">{{ $message }}</span>
 						@enderror
@@ -62,7 +64,7 @@
 					<td>Image</td>
 					<td>
                         <input type="file" name="image_path" class="form-control">
-						@error('image-path')
+						@error('image_path')
 							<span class="text-danger">{{ $message }}</span>
 						@enderror
 					</td>
@@ -70,7 +72,7 @@
 				<tr>
 					<td>Date Updated</td>
 					<td>
-                        <input type="datetime-local" name="updated_at" value="{{ old('updated_at') }}" class="form-control">
+                        <input type="datetime-local" name="updated_at" value="{{ old('updated_at', \Carbon\Carbon::parse($item->updated_at)->format('Y-m-d\TH:i')) }}">
 						@error('updated_at')
 							<span class="text-danger">{{ $message }}</span>
 						@enderror

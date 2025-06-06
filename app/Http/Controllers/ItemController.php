@@ -12,12 +12,24 @@ class ItemController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
-        $cakes = Item::with(['category:id,name'])->get();
-        return view('items.index', compact('cakes'));
+        $query = Item::with(['category:id,name']);
 
+        // If search term exists, apply filter
+        if ($request->has('search') && $request->search != '') {
+            $search = $request->search;
+            $query->where(function ($q) use ($search) {
+                $q->where('name', 'like', "%$search%")
+                ->orWhereHas('category', function ($subQuery) use ($search) {
+                    $subQuery->where('name', 'like', "%$search%");
+                });
+            });
+        }
+
+         $cakes = $query->orderBy('created_at', 'desc')->simplePaginate(10);
+
+        return view('items.index', compact('cakes'));
     }
 
     /**
@@ -83,29 +95,29 @@ class ItemController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $validated_data= $request->validate([
-            'name'=> 'required|string|max:255',
-            'description'=> 'nullable|string|max:255',
+        $validated_data = $request->validate([
+            'name' => 'required|string|max:255',
+            'description' => 'nullable|string|max:255',
             'category_id' => 'required|exists:categories,id',
-            'price'=> 'required|numeric|min:1',
-            'image_path'=> 'nullable|image|mimes:jpeg,png,jpg|max:2048',
-            'created_at'=> 'required|date',
-            'updated_at'=> 'required|date',
-            ]);
-    
-        // Check if a image_path was uploaded
+            'price' => 'required|numeric|min:1',
+            'image_path' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+            'updated_at' => 'required|date',
+        ]);
+
+        $item = Item::findOrFail($id);
+
         if ($request->hasFile('image_path')) {
             $imageName = time() . '.' . $request->image_path->extension();
             $request->image_path->move(public_path('images'), $imageName);
             $validated_data['image_path'] = $imageName;
         }
 
-        // Store the validated data in the 'Items' table
-        Item::create($validated_data);
+        $item->update($validated_data); 
 
-        // Redirect with a success message
-        return redirect()->back()->with('message', 'Item Update successfully!');
+        return redirect()->route('items.index')->with('message', 'Item updated successfully!');
     }
+
+
 
     /**
      * Remove the specified resource from storage.

@@ -18,8 +18,8 @@
 		<table class="table table-bordered">
 			<tr>
 			<div class="d-flex flex-row-reverse py-2 gap-1">
-			<form action="#" method="GET">
-				<input type="text" name="search" placeholder="Search...">
+			<form action="{{ route('items.index') }}" method="GET">
+				<input type="text" name="search" placeholder="Search..." value="{{ request('search') }}">
 				<button type="submit">Search</button>
 			</form>
 			</div>
@@ -39,7 +39,7 @@
 			<tr>
 				<td>{{ ++$i }}</td>
 				<td>{{ $item->name }}</td>
-				<td>{{ $item->category->id }}</td>
+				<td>{{ $item->category->name }}</td>
 				<td>{{ $item->price }}</td>
                 <td>
 					@if ($item->image_path)
@@ -61,6 +61,9 @@
 			</tr>
 			@endforeach
 		</table>
+		<div class="mt-6">
+            {{ $cakes->links() }}
+        </div>
 	</div>
 </div>
 @endsection

@@ -17,7 +17,7 @@
             @csrf
             <label for="name" class="mr-2">Category Name:</label>
             <input type="text" name="name" id="name" class="form-control mr-2" placeholder="Enter category name" required>
-            <button type="submit" class="btn btn-success mt-3">Add Category</button>
+            <button type="submit" class="btn btn-primary mt-3">Add Category</button>
         </form>
 
         <!-- List of Categories -->

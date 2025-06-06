@@ -11,13 +11,13 @@ class OrderItems extends Model
 
     protected $fillable = ['order_id', 'items_id', 'quantity', 'price', 'subtotal'];
 
-    public function items()
+    public function product()
     {
-        return $this->belongsTo(Item::class);
+        return $this->belongsTo(Item::class, 'items_id');
     }
 
     public function orders()
     {
-        return $this->belongsTo(Orders::class);
+        return $this->belongsTo(Orders::class, 'order_id');
     }
 }

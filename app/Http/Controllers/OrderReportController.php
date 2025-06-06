@@ -13,7 +13,7 @@ class OrderReportController extends Controller
      */
     public function index(Request $request)
     {
-        return view('report.orderreport.index');
+        return view('report.ordersreport.index');
     }
 
 
@@ -72,7 +72,7 @@ class OrderReportController extends Controller
 
         $Orders = $this->generateReportQuery($fromDate, $toDate);
 
-        return view('report.orderreport.generateReport', ['orders' => $Orders]);
+        return view('report.ordersreport.generateReport', ['Orders' => $Orders]);
     }
 
     /**
@@ -80,25 +80,17 @@ class OrderReportController extends Controller
      */
     private function generateReportQuery($fromDate, $toDate)
     {
-        $query = Item::query();
+        $query = Orders::query();
 
         if ($fromDate && $toDate) {
-            $query->where(function ($q) use ($fromDate, $toDate) {
-                $q->whereDate('created_at', '>=', $fromDate)
-                    ->whereDate('created_at', '<=', $toDate)
-                    ->orWhere(function ($q) use ($fromDate, $toDate) {
-                        $q->whereDate('updated_at', '>=', $fromDate)
-                            ->whereDate('updated_at', '<=', $toDate);
-                    });
-            });
+            $query->whereBetween('created_at', [$fromDate, $toDate]);
         } elseif ($fromDate) {
-            $query->whereDate('created_at', '>=', $fromDate)
-                  ->orWhereDate('updated_at', '>=', $fromDate);
+            $query->where('created_at', '>=', $fromDate);
         } elseif ($toDate) {
-            $query->whereDate('created_at', '<=', $toDate)
-                  ->orWhereDate('updated_at', '<=', $toDate);
+            $query->where('created_at', '<=', $toDate);
         }
 
-        return $query->get();
+        return $query->with('user')->get();
     }
+
 }

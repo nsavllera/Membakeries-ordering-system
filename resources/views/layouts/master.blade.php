@@ -81,9 +81,9 @@
                 <div class="row">
                     <div class="col-md-2">
                         <a href="{{ route('home')}}" class="btn btn-primary w-100 mb-2">Dashboard</a>
-                        <a href="{{ route('items.index')}}" class="btn btn-primary w-100 mb-2">Manage Catalogue</a>
-                        <a href="{{route('order.index')}}" class="btn btn-primary w-100 mb-2">Order List</a>
-                        <a href="{{route('schedule.index')}}" class ="btn btn-primary w-100 mb-2">Delivery Schedule</a>
+                        <a href="{{ route('items.index') }}" class="btn btn-primary w-100 mb-2">Manage Catalogue</a>
+                        <a href="{{ route('order.index')}}" class="btn btn-primary w-100 mb-2">Order List</a>
+                        <a href="{{ route('category.index')}}" class ="btn btn-primary w-100 mb-2">Manage Category</a>
                     <div class="dropdown">
                         <button class="btn btn-primary w-100 mb-2 dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
                             Reports

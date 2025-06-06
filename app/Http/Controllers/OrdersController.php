@@ -12,17 +12,19 @@ class OrdersController extends Controller
      */
     public function index(Request $request)
     {
-        
         $status = $request->input('status');
 
-        $order = Orders::with(['user', 'items.product'])
-            ->when($status, function ($query, $status) {
-                return $query->where('status', $status);
-            })
-            ->get();
+        $query = Orders::with(['items', 'items.product']);
 
-        return view('order.index', compact('order', 'status'));
+        if ($status) {
+            $query->where('status', $status);
+        }
+
+        $orders = $query->orderBy('created_at', 'desc')->simplePaginate(5); 
+
+        return view('order.index', compact('orders', 'status'));
     }
+
 
 
     /**

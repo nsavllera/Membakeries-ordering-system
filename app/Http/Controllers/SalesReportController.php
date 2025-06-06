@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Orders;
 use App\Models\Item;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class SalesReportController extends Controller
 {
@@ -78,27 +79,33 @@ class SalesReportController extends Controller
     /**
      * Query for generating the report based on date range.
      */
+
+
+
     private function generateReportQuery($fromDate, $toDate)
     {
-        $query = Item::query();
+        $query = DB::table('order_items')
+            ->join('orders', 'order_items.order_id', '=', 'orders.id')
+            ->join('items', 'order_items.items_id', '=', 'items.id')
+            ->select(
+                'items.id as items_id',
+                'items.name as product_name',
+                DB::raw('SUM(order_items.quantity) as total_quantity'),
+                DB::raw('SUM(order_items.quantity * order_items.price) as total_sales')
+            )
+            ->groupBy('items.id', 'items.name')
+            ->orderBy('items.name', 'asc');
 
         if ($fromDate && $toDate) {
-            $query->where(function ($q) use ($fromDate, $toDate) {
-                $q->whereDate('created_at', '>=', $fromDate)
-                    ->whereDate('created_at', '<=', $toDate)
-                    ->orWhere(function ($q) use ($fromDate, $toDate) {
-                        $q->whereDate('updated_at', '>=', $fromDate)
-                            ->whereDate('updated_at', '<=', $toDate);
-                    });
-            });
+            $query->whereBetween('orders.created_at', [$fromDate, $toDate]);
         } elseif ($fromDate) {
-            $query->whereDate('created_at', '>=', $fromDate)
-                  ->orWhereDate('updated_at', '>=', $fromDate);
+            $query->where('orders.created_at', '>=', $fromDate);
         } elseif ($toDate) {
-            $query->whereDate('created_at', '<=', $toDate)
-                  ->orWhereDate('updated_at', '<=', $toDate);
+            $query->where('orders.created_at', '<=', $toDate);
         }
 
         return $query->get();
     }
+
+
 }

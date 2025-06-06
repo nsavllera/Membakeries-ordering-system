@@ -1,78 +1,104 @@
 @extends('layouts.master')
 
 @section('content')
-<div class="card">
+<div class="p-6 bg-gray-50 min-h-screen">
 
-	<h3 class="mt-4 mb-0">List Of Orders</h3>
+    <h3 class="mb-4 text-lg font-semibold text-gray-800">List Of Orders</h3>
 
-	<div class="card-body bg-white justify-content-left">
+    <div class="p-4 bg-white rounded-md border shadow">
 
-		@if (session("message"))
-		<div class="alert alert-success mt-3">
-			<p>{{ session("message") }}</p>
-		</div>
-		@endif
-		
-        <form action="{{ route('order.index') }}" method="GET" class="mb-6">
-            <label for="status" class="mr-4">Filter by Status:</label>
-            <select id="status" name="status" onchange="this.form.submit()" class="border rounded-md p-2">
+        @if (session("message"))
+        <div class="alert alert-success mb-4 py-2 px-4 text-sm bg-green-100 text-green-800 rounded">
+            <p class="m-0">{{ session("message") }}</p>
+        </div>
+        @endif
+
+        <form action="{{ route('order.index') }}" method="GET" class="mb-3 flex items-center space-x-3 text-sm bg-pink-50 p-3 rounded">
+            <label for="status" class="font-medium">Filter by Status:</label>
+            <select id="status" name="status" onchange="this.form.submit()" class="border rounded px-2 py-1 text-sm">
                 <option value="">All</option>
                 <option value="preparing" {{ $status == 'preparing' ? 'selected' : '' }}>Preparing</option>
                 <option value="delivered" {{ $status == 'delivered' ? 'selected' : '' }}>Delivered</option>
                 <option value="canceled" {{ $status == 'canceled' ? 'selected' : '' }}>Canceled</option>
             </select>
-            <noscript><button type="submit" class="btn btn-primary mt-2">Filter</button></noscript>
+            <button type="submit" class="btn btn-primary py-1 px-2 text-xs">Filter</button>
         </form>
 
-        @if(count($order) > 0)
-            @foreach ($order as $orders)
-                <div class="jumbotron w-70">
-                    <h2 class="text-2xl font-semibold">Order #{{ $orders->id }}</h2>
-                    <p>Username: {{ $orders->user->name }}</p>
-                    <p>User ID: {{ $orders->user_id }}</p>
-                    <p>Status: {{ $orders->status }}</p>
-                    <p>Total: RM {{ $orders->total }}</p>
-                    <p>Address: {{ $orders->delivery_id }}</p>
-                    <p>Created At: {{ $order->timestamps->format('d-m-Y H:i') }}</p>
+        @if($orders->count() > 0)
+            @foreach ($orders as $order)
+                <div class="w-full border border-gray-200 rounded-lg mb-4 p-4 shadow-sm bg-pink-100 min-h-[250px]">
+                    <h3 class="text-base font-semibold text-gray-800 mb-2">Order #{{ $order->id }}</h3>
 
-                    <h3 class="mt-4 text-xl">Items:</h3>
-                    <table class="table-auto w-full text-left mt-4">
-                        <thead>
+                    <table class="w-full border text-sm mb-4 bg-white rounded">
+                        <thead class="bg-green-100">
                             <tr>
-                                <th class="px-4 py-2">Product</th>
-                                <th class="px-4 py-2">Quantity</th>
-                                <th class="px-4 py-2">Price</th>
-                                <th class="px-4 py-2">Subtotal</th>
+                                <th class="border px-2 py-1 text-left">Username</th>
+                                <th class="border px-2 py-1 text-left">User ID</th>
+                                <th class="border px-2 py-1 text-left">Status</th>
+                                <th class="border px-2 py-1 text-left">Total</th>
+                                <th class="border px-2 py-1 text-left">Address ID</th>
+                                <th class="border px-2 py-1 text-left">Created At</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($orders->items as $item)
-                                <tr>
-                                    <td class="px-4 py-2">{{ $item->product->name }}</td>
-                                    <td class="px-4 py-2">{{ $item->quantity }}</td>
-                                    <td class="px-4 py-2">RM {{ $item->price }}</td>
-                                    <td class="px-4 py-2">RM {{ $item->subtotal }}</td>
-                                </tr>
-                            @endforeach
+                            <tr>
+                                <td class="border px-2 py-1">{{ $order->user->name }}</td>
+                                <td class="border px-2 py-1">{{ $order->user_id }}</td>
+                                <td class="border px-2 py-1 capitalize">{{ $order->status }}</td>
+                                <td class="border px-2 py-1">RM {{ number_format($order->total, 2) }}</td>
+                                <td class="border px-2 py-1">{{ $order->delivery_id }}</td>
+                                <td class="border px-2 py-1">{{ $order->created_at->format('d-m-Y H:i') }}</td>
+                            </tr>
                         </tbody>
                     </table>
 
-                    <form action="{{ route('orders.update-status', $orders->id) }}" method="POST" class="mt-4 mb-4">
+                    @if($order->items->count() > 0)
+                        <table class="w-full border text-sm mb-2 bg-white rounded">
+                            <thead class="bg-gray-100">
+                                <tr>
+                                    <th class="border px-2 py-1 text-left">Product</th>
+                                    <th class="border px-2 py-1 text-right">Qty</th>
+                                    <th class="border px-2 py-1 text-right">Price</th>
+                                    <th class="border px-2 py-1 text-right">Subtotal</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($order->items as $item)
+                                    <tr>
+                                        <td class="border px-2 py-1">{{ $item->product->name }}</td>
+                                        <td class="border px-2 py-1 text-right">{{ $item->quantity }}</td>
+                                        <td class="border px-2 py-1 text-right">{{ number_format($item->price, 2) }}</td>
+                                        <td class="border px-2 py-1 text-right">{{ number_format($item->subtotal, 2) }}</td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    @else
+                        <p class="italic text-gray-500 text-sm mb-2">No items for this order.</p>
+                    @endif
+
+                    <form action="{{ route('orders.update-status', $order->id) }}" method="POST" class="flex items-center space-x-2 text-sm">
                         @csrf
-                        <label for="status" class="mr-4">Change Status:</label>
-                        <select id="status" name="status" class="border rounded-md p-2">
+                        <label for="status-{{ $order->id }}" class="font-medium">Change Status:</label>
+                        <select id="status-{{ $order->id }}" name="status" class="border rounded px-2 py-1">
                             <option value="preparing" {{ $order->status == 'preparing' ? 'selected' : '' }}>Preparing</option>
                             <option value="delivered" {{ $order->status == 'delivered' ? 'selected' : '' }}>Delivered</option>
                             <option value="canceled" {{ $order->status == 'canceled' ? 'selected' : '' }}>Canceled</option>
                         </select>
-                        <button type="submit" class="bg-blue-500 text-white py-2 px-4 rounded-md mt-2">Update Status</button>
+                        <button type="submit" class="btn btn-primary py-1 px-2 text-xs">
+                            Update
+                        </button>
+
                     </form>
                 </div>
             @endforeach
+         <div class="mt-6">
+            {{ $orders->links() }}
+        </div>
         @else
-            <p class="text-gray-700">No orders available.</p>
+            <p class="italic text-gray-600 text-sm">No orders available.</p>
         @endif
-
-	</div>
+    </div>
+    
 </div>
 @endsection
