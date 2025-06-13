@@ -4,26 +4,28 @@ namespace App\Http\Controllers;
 
 use App\Models\Orders;
 use Illuminate\Http\Request;
-
+use App\Events\NewOrderCreated;
 class OrdersController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request)
+   public function index(Request $request)
     {
         $status = $request->input('status');
 
-        $query = Orders::with(['items', 'items.product']);
+        $query = Orders::with(['user', 'items.product', 'delivery'])
+            ->leftJoin('deliveries', 'orders.delivery_id', '=', 'deliveries.id')
+            ->when($status, fn($q) => $q->where('orders.status', $status))
+            ->orderByRaw("FIELD(orders.status, 'preparing', 'on delivery', 'can be pickuped', 'delivered', 'canceled')")
+            ->orderBy('deliveries.delivery_datetime', 'asc')
+            ->select('orders.*'); // Important: prevent column conflicts
 
-        if ($status) {
-            $query->where('status', $status);
-        }
-
-        $orders = $query->orderBy('created_at', 'desc')->simplePaginate(5); 
+        $orders = $query->simplePaginate(5);
 
         return view('order.index', compact('orders', 'status'));
     }
+
 
 
 
@@ -38,10 +40,25 @@ class OrdersController extends Controller
     /**
      * Store a newly created resource in storage.
      */
+
     public function store(Request $request)
     {
-        //
+        // Save the order (adjust as needed for your logic)
+        $order = new Orders();
+        $order->user_id = $request->user()->id;
+        $order->status = 'preparing';
+        $order->total = $request->input('total');
+        $order->delivery_id = $request->input('delivery_id');
+        $order->save();
+
+
+
+        
+        event(new NewOrderCreated($order));
+
+        return response()->json(['message' => 'Order created successfully'], 201);
     }
+
 
     /**
      * Display the specified resource.
@@ -75,13 +92,38 @@ class OrdersController extends Controller
         //
     }
 
-    public function updateStatus(Request $request, $orderId)
+   public function updateStatus(Request $request, $orderId)
     {
-        $order = Orders::findOrFail($orderId);
+        $validated = $request->validate([
+            'status' => 'required|in:preparing,on delivery,can be pickuped,delivered,canceled',
+        ]);
 
-        $order->status = $request->input('status');
+        $order = Orders::findOrFail($orderId);
+        $order->status = $validated['status'];
         $order->save();
 
-        return redirect()->route('order.index')->with('success', 'Order status updated successfully!');
+        return redirect()->route('order.index')->with('message', 'Order status updated successfully!');
     }
+
+    public function checkNewOrders(Request $request)
+    {
+        $latestOrderTime = $request->input('last_checked_at');
+
+        $newOrders = Orders::where('created_at', '>', $latestOrderTime)->count();
+
+        session()->flash('new-order', true);
+
+
+        return response()->json(['new-order' => $newOrders]);
+    }
+
+    public function showInvoice($id)
+    {
+        $order = Orders::with(['user', 'items.product', 'delivery', 'payment'])->findOrFail($id);
+
+        return view('order.invoice', compact('order'));
+    }
+
+
+
 }

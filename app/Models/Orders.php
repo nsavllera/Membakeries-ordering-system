@@ -28,4 +28,19 @@ class Orders extends Model
     public function payment(){
         return $this->belongsTo(Payment::class, 'payment_id');
     }
+
+
+    public function getCustomDetailsAttribute()
+    {
+        $firstItem = $this->items->first();
+        return $firstItem?->custom_details ?? null;
+    }
+
+
+    public function getIsCustomAttribute()
+    {
+        $details = $this->custom_details;
+        return !empty($details);
+    }
+
 }

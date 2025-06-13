@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Orders;
 use App\Models\Item;
+use App\Models\User;
 use Illuminate\Support\Carbon;
 use Carbon\CarbonPeriod;
 use IcehouseVentures\LaravelChartjs\Facades\Chartjs;
@@ -31,57 +32,39 @@ class HomeController extends Controller
         // Get last 5 added products
         $recentProducts = Item::orderBy('created_at', 'desc')->take(5)->get();
 
-        $start = Carbon::parse(Orders::min("created_at"));
-        $end = Carbon::now();
-        $period = CarbonPeriod::create($start, "1 month", $end);
+        $totalOrders = Orders::count();
+        $totalCustomers = User::where('role', 'customer')->count(); // adjust role logic
+        $totalProducts = Item::count();
 
-        $salesPerMonth = collect($period)->map(function ($date) {
-            $endDate = $date->copy()->endOfMonth();
+        // Set start and end of date range
+        $start = Carbon::parse(Orders::min("created_at"))->startOfWeek();
+        $end = Carbon::now()->endOfWeek();
+
+        // Create a weekly period
+        $period = CarbonPeriod::create($start, '1 week', $end);
+
+        
+         // Build weekly sales data
+        $salesPerWeek = collect($period)->map(function ($date) {
+        $startOfWeek = $date->copy()->startOfWeek();
+        $endOfWeek = $date->copy()->endOfWeek();
 
             return [
-                "count" => Orders::where("created_at", "<=", $endDate)->count(),
-                "month" => $endDate->format("Y-m-d")
+                "total_sales" => Orders::whereBetween("created_at", [$startOfWeek, $endOfWeek])->sum("total"), 
+                "week" => $startOfWeek->format("Y-m-d") . ' - ' . $endOfWeek->format("Y-m-d"),
             ];
         });
 
-        $data = $salesPerMonth->pluck("count")->toArray();
-        $labels = $salesPerMonth->pluck("month")->toArray();
+        $data = $salesPerWeek->pluck("total_sales")->toArray();
+        $labels = $salesPerWeek->pluck("week")->toArray();
 
-
-        // Example with ConsoleTVs/Charts package (adjust import and usage as needed)
-        $chart = Chartjs::build()
-            ->name('Total Sales')
-            ->type("line")
-            ->size(["width" => 400, "height" => 200])
-            ->labels($labels)
-            ->datasets([
-                [
-                    "label" => "Sales",
-                    "backgroundColor" => "rgba(38, 185, 154, 0.31)",
-                    "borderColor" => "rgba(38, 185, 154, 0.7)",
-                    "data" => $data
-                ]
-                ])
-            ->options([
-                'scales' => [
-                    'x' => [
-                        'type' => 'time',
-                        'time' => [
-                            'unit' => 'month'
-                        ],
-                        'min' => $start->format("Y-m-d"),
-                    ]
-                ],
-                'plugins' => [
-                    'title' => [
-                        'display' => true,
-                        'text' => 'Monthly Sales'
-                    ]
-                ]
-            ]);
-
+        $stats = [
+            'preparing' => Orders::where('status', 'preparing')->count(),
+            'on_delivery' => Orders::where('status', 'on delivery')->count(),
+            'pickup_ready' => Orders::where('status', 'can be pickuped')->count(),
+        ];
         // Pass to Blade view
-        return view('home', compact('recentProducts', 'chart'));
+        return view('home', compact('recentProducts','stats', 'labels', 'data','totalOrders', 'totalCustomers', 'totalProducts'));
     }
 
 }

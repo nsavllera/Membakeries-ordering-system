@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\AuthController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ItemController;
 use App\Http\Controllers\OrdersController;
@@ -44,6 +45,8 @@ Route::delete('/items/{id}', [ItemController::class, 'destroy'])->name('items.de
 
 Route::get('/order', [OrdersController::class, 'index'])->name('order.index');
 Route::post('/order/{order}/update-status', [OrdersController::class, 'updateStatus'])->name('orders.update-status');
+Route::get('/order/{id}/invoice', [OrdersController::class, 'showInvoice'])->name('orders.invoice');
+
 
 Route::get('/category', [CategoryController::class, 'index'])->name('category.index');
 Route::post('/category', [CategoryController::class, 'store'])->name('category.store');
