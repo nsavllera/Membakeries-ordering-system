@@ -56,11 +56,14 @@ class ItemController extends Controller
             'updated_at' => 'required|date',
         ]);
 
-        try {
-            $uploadedFileUrl = Cloudinary::upload($request->file('image_path')->getRealPath())->getSecurePath();
-            $validated_data['image_path'] = $uploadedFileUrl;
-        } catch (\Exception $e) {
-            return back()->withErrors(['image_path' => 'Cloudinary upload failed: ' . $e->getMessage()]);
+        if ($request->hasFile('image_path') && $request->file('image_path')->isValid()) {
+            try {
+                $coludinaryImage = $request->file('image_path')->storeOnCloudinary('items');
+                $url = $coludinaryImage->getSecurePath();
+                $validated_data['image_path'] = $url;
+            } catch (\Exception $e) {
+                return back()->withErrors(['image_path' => 'Image upload failed: ' . $e->getMessage()]);
+            }
         }
 
         Item::create($validated_data);
