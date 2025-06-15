@@ -28,7 +28,6 @@
     border-radius: 12px;
     margin-left: 10px;
     color:  #493628;
-    font-family: 'Alkalami';
     cursor: pointer;
     transition: background-color 0.3s;
 }
@@ -84,7 +83,7 @@ a:hover {
     border: none;
     border-radius: 5px;
     transition: background-color 0.3s ease;
-    font-family: 'Alkalami';
+  
 }
 
 .btn-primary:hover {
@@ -95,7 +94,7 @@ a:hover {
 main {
     padding: 20px;
     background-color: #FEF9F2;
-    font-family: 'Alkalami';
+ 
 }
 
 /* Sidebar styling */
