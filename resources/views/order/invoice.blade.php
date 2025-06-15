@@ -46,7 +46,7 @@
           <div class="col-4">
             @if (!empty($item->custom_details['image_path']))
               <a 
-                href="http://172.20.10.2/Membakeries_API/resources/images/{{ $item->custom_details['image_path'] }}" 
+                href="https://membakeriesapi-production.up.railway.app/resources/images/{{ $item->custom_details['image_path'] }}" 
                 class="btn btn-sm btn-outline-primary" 
                 download>
                 Download Image
