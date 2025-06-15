@@ -42,34 +42,30 @@ class ItemController extends Controller
         return view('items.create', compact('categories'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
+
+
     public function store(Request $request)
     {
-        //
-        $validated_data= $request->validate([
-            'name'=> 'required|string|max:255',
-            'description'=> 'nullable|string|max:255',
+        $validated_data = $request->validate([
+            'name' => 'required|string|max:255',
+            'description' => 'nullable|string|max:255',
             'category_id' => 'required|exists:categories,id',
-            'price'=> 'required|numeric|min:1',
-            'image_path'=> 'nullable|image|mimes:jpeg,png,jpg|max:2048',
-            'created_at'=> 'required|date',
-            'updated_at'=> 'required|date',
-            ]);
-    
-        // Check if a image_path was uploaded
-        if ($request->hasFile('image_path')) {
+            'price' => 'required|numeric|min:1',
+            'image_path' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+            'created_at' => 'required|date',
+            'updated_at' => 'required|date',
+        ]);
+
+        if ($request->hasFile('image_path') && $request->file('image_path')->isValid()) {
             $uploadedFileUrl = Cloudinary::upload($request->file('image_path')->getRealPath())->getSecurePath();
             $validated_data['image_path'] = $uploadedFileUrl;
         }
 
-        // Store the validated data in the 'Items' table
         Item::create($validated_data);
 
-        // Redirect with a success message
         return redirect()->back()->with('message', 'Item added successfully!');
     }
+
 
 
 /**
@@ -106,10 +102,9 @@ class ItemController extends Controller
 
         $item = Item::findOrFail($id);
 
-        if ($request->hasFile('image_path')) {
-            $imageName = time() . '.' . $request->image_path->extension();
-            $request->image_path->move(public_path('images'), $imageName);
-            $validated_data['image_path'] = $imageName;
+        if ($request->hasFile('image_path') && $request->file('image_path')->isValid()) {
+            $uploadedFileUrl = Cloudinary::upload($request->file('image_path')->getRealPath())->getSecurePath();
+            $validated_data['image_path'] = $uploadedFileUrl;
         }
 
         $item->update($validated_data); 
