@@ -49,12 +49,12 @@
             color: white;
         }
 
-        .dropdown-wrapper {
+        .drpdwn-wrapper {
             position: relative;
             display: inline-block;
         }
 
-        .dropdown-button {
+        .drpdwn-button {
             background-color:  #516249; 
             color: white;
             padding: 0.4rem;
@@ -64,11 +64,11 @@
             border-radius: 0.25rem 0 0 0.25rem;
         }
 
-        .dropdown-wrapper:hover .dropdown-menu {
+        .drpdwn-wrapper:hover .dropdown-menu {
             display: block;
         }
 
-        .dropdown-toggle-button {
+        .drpdwn-toggle-button {
             background-color: #516249;
             color: white;
             padding: 0.4rem 0.6rem;
@@ -79,7 +79,7 @@
             border-radius: 0 0.25rem 0.25rem 0;
         }
 
-        .dropdown-menu {
+        .drpdwn-menu {
             display: none;
             position: absolute;
             z-index: 10;
@@ -91,11 +91,11 @@
             box-shadow: 0 2px 5px rgba(0,0,0,0.1);
         }
 
-        .dropdown-menu form {
+        .drpdwn-menu form {
             margin: 0;
         }
 
-        .dropdown-item {
+        .drpdwn-item {
             width: 100%;
             padding: 0.5rem 1rem;
             font-size: 0.875rem;
@@ -105,7 +105,7 @@
             cursor: pointer;
         }
 
-        .dropdown-item:hover {
+        .drpdwn-item:hover {
             background-color: #f1f1f1;
         }
 
@@ -124,159 +124,6 @@
             color:rgb(106, 57, 25) !important; 
         }
         
-
-        /* General Reset */
-        body, h1, p, a, ul, li, button {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Alkalami';
-        }
-        body {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            background-color: #f3f4f6;
-        }
-        .header {
-            display: flex;
-            width: 97%;
-            justify-content: space-between;
-            align-items: center;
-            padding: 10px 20px;
-            background-color: #493628;
-            border-radius: 8px 8px 0 0;
-                }
-        .header .logo {
-            display: flex;
-            align-items: center;
-        }
-        .header .logo img {
-            height: 70px;
-            margin-right: 10px;
-        }
-        .header .logo .name {
-            color: white;
-            font-size: 1.5rem;
-            font-family: 'Alkalami';
-            margin-top: 6.5%;
-        }
-        .header .actions .nav-link{
-            background-color: #FFF7D1;
-            border-style: outset;
-            padding: 8px 16px;
-            border-radius: 12px;
-            margin-left: 10px;
-            color:  #493628;
-            font-family: 'Alkalami';
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
-        .header .actions .nav-link:hover {
-            background-color: #e0e7ff;
-        }
-
-        /* Main Container */
-        .container {
-            width: 97%;
-            background-color: rgba(255,255,255,0.6);
-            background-blend-mode: lighten;
-            border-radius: 0 0 8px 8px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-            padding: 20px;
-            text-align: center;
-        }
-        h1 {
-            margin-top: 10%;
-            font-size: 2rem;
-            margin-bottom: 20px;
-            font-family: 'Alkalami';
-            color: #493628;
-        }
-        p {
-            margin-bottom: 10%;
-            font-size: 1rem;
-            color: #AB886D;
-            line-height: 1.8;
-            font-family: 'Alkalami';
-            padding-left: 10%;
-            padding-right: 10%;
-        }
-        a {
-            color: #493628;
-            text-decoration: none;
-            font-family: 'Alkalami';
-        }
-        a:hover {
-            text-decoration: underline;
-        }
-
-
-        /* Change background color for the navbar */
-        .navbar {
-            background-color: #4a382a;
-            color: white;
-        }
-
-        /* Style buttons */
-        .btn-primary {
-            background-color: #516249;
-            border: none;
-            border-radius: 5px;
-            transition: background-color 0.3s ease;
-            font-family: 'Alkalami';
-        }
-
-        .btn-primary:hover {
-            background-color: #b4e2c2;
-        }
-
-        /* Add padding to main content */
-        main {
-            padding: 20px;
-            background-color: #FEF9F2;
-            font-family: 'Alkalami';
-        }
-
-        /* Sidebar styling */
-        .col-md-2 {
-            background-color: #f0f1d6;
-            padding: 15px;
-            border-right: 2px solid #ddd;
-        }
-
-        /*Card Styling*/
-        .card{
-            background-color: #fcdada;
-
-        }
-        /* style.css */
-        .custom-table {
-            border: 1px solid #6c5a5a;
-            border-radius: 15px;
-        }
-
-        .custom-table tr,
-        .custom-table td {
-            background-color: #dde5cf;
-            border-color: #6c5a5a;
-            text-align: left;
-        }
-
-        .jumbotron{
-            border-style: outset;
-            border-color: #e9c2c2;
-            background-color: #FFF7D1;
-            border-radius: 12px;
-
-        }
-
-            .jumbotron .p{
-                margin-left: 20px;;
-                color: #34261c;
-                text-align: left;
-            }
     </style>
 
 </head>
