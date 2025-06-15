@@ -61,7 +61,7 @@
 					<td>Image</td>
 					<td>
                         <input type="file" name="image_path" class="form-control">
-						@error('image-path')
+						@error('image_path')
 							<span class="text-danger">{{ $message }}</span>
 						@enderror
 					</td>

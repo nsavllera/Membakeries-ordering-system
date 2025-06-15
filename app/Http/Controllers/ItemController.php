@@ -57,8 +57,12 @@ class ItemController extends Controller
         ]);
 
         if ($request->hasFile('image_path') && $request->file('image_path')->isValid()) {
-            $uploadedFileUrl = Cloudinary::upload($request->file('image_path')->getRealPath())->getSecurePath();
-            $validated_data['image_path'] = $uploadedFileUrl;
+            try {
+                $uploadedFileUrl = Cloudinary::upload($request->file('image_path')->getRealPath())->getSecurePath();
+                $validated_data['image_path'] = $uploadedFileUrl;
+            } catch (\Exception $e) {
+                return back()->withErrors(['image_path' => 'Image upload failed: ' . $e->getMessage()]);
+            }
         }
 
         Item::create($validated_data);
