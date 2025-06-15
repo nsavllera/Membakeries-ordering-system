@@ -60,7 +60,7 @@ class ItemController extends Controller
         // Check if a image_path was uploaded
         if ($request->hasFile('image_path')) {
             $imageName = time() . '.' . $request->image_path->extension();
-            $request->image_path->move(public_path('images'), $imageName);
+            $path = $request->image_path->storeAs('public/images', $imageName);
             $validated_data['image_path'] = $imageName;
         }
 
