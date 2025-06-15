@@ -119,6 +119,7 @@
 
     <!-- Scripts -->
     @vite(['resources/sass/app.scss', 'resources/js/app.js'])
+    <link rel="stylesheet" href="{{ asset('resources/css/style.css') }}">
   
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <!-- Bootstrap CSS -->
