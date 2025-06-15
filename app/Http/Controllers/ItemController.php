@@ -6,6 +6,7 @@ use App\Models\Item;
 use App\Models\Category;
 use Illuminate\Http\Request;
 use IcehouseVentures\LaravelChartjs\Facades\Chartjs;
+use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
 
 class ItemController extends Controller
 {
@@ -59,9 +60,8 @@ class ItemController extends Controller
     
         // Check if a image_path was uploaded
         if ($request->hasFile('image_path')) {
-            $imageName = time() . '.' . $request->image_path->extension();
-            $request->image_path->move(public_path('images'), $imageName);
-            $validated_data['image_path'] = $imageName;
+            $uploadedFileUrl = Cloudinary::upload($request->file('image_path')->getRealPath())->getSecurePath();
+            $validated_data['image_path'] = $uploadedFileUrl;
         }
 
         // Store the validated data in the 'Items' table
