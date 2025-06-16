@@ -87,10 +87,10 @@
             <a href="{{ route('orders.invoice', $order->id) }}" class="text-blue-600 hover:underline">Details</a>
           </td>
           <td class="px-5 py-3 w-60 relative">
-            <div class="drpdwn-wrapper">
-                <button class="drpdwn-button">{{ ucfirst($order->status) }}</button>
-                <button class="drpdwn-toggle-button">▾</button>
-                <div class="drpdwn-menu">
+            <div class="dropdown-wrapper">
+                <button class="dropdown-button">{{ ucfirst($order->status) }}</button>
+                <button class="dropdown-toggle-button">▾</button>
+                <div class="dropdown-menu">
                     @php
                         $statuses = ['preparing', 'delivered', 'canceled'];
                         if ($order->delivery->method === 'delivery') {
@@ -105,7 +105,7 @@
                         @csrf
                         @method('POST')
                         <input type="hidden" name="status" value="{{ $stats }}">
-                        <button type="submit" class="drpdwn-item {{ $order->status == $stats ? 'active' : '' }}">
+                        <button type="submit" class="dropdwn-item {{ $order->status == $stats ? 'active' : '' }}">
                             {{ ucfirst($stats) }}
                         </button>
                     </form>

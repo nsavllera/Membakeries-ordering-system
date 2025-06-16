@@ -186,12 +186,12 @@
             color: white;
         }
 
-        .drpdwn-wrapper {
+        .dropdown-wrapper {
             position: relative;
             display: inline-block;
         }
 
-        .drpdwn-button {
+        .dropdown-button {
             background-color:  #516249; 
             color: white;
             padding: 0.4rem;
@@ -201,11 +201,11 @@
             border-radius: 0.25rem 0 0 0.25rem;
         }
 
-        .drpdwn-wrapper:hover .dropdown-menu {
+        .dropdown-wrapper:hover .dropdown-menu {
             display: block;
         }
 
-        .drpdwn-toggle-button {
+        .dropdown-toggle-button {
             background-color: #516249;
             color: white;
             padding: 0.4rem 0.6rem;
@@ -216,7 +216,7 @@
             border-radius: 0 0.25rem 0.25rem 0;
         }
 
-        .drpdwn-menu {
+        .dropdown-menu {
             display: none;
             position: absolute;
             z-index: 10;
@@ -228,11 +228,11 @@
             box-shadow: 0 2px 5px rgba(0,0,0,0.1);
         }
 
-        .drpdwn-menu form {
+        .dropdown-menu form {
             margin: 0;
         }
 
-        .drpdwn-item {
+        .dropdown-item {
             width: 100%;
             padding: 0.5rem 1rem;
             font-size: 0.875rem;
@@ -242,7 +242,7 @@
             cursor: pointer;
         }
 
-        .drpdwn-item:hover {
+        .dropdown-item:hover {
             background-color: #f1f1f1;
         }
 
