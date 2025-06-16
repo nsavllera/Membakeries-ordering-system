@@ -58,8 +58,8 @@ class ItemController extends Controller
 
         if ($request->hasFile('image_path') && $request->file('image_path')->isValid()) {
             $filename = time() . '.' . $request->image_path->extension();
-            $path = $request->file('image_path')->move(public_path('images'), $filename);
-            $validated_data['image_path'] = 'images/' . $filename;
+            $path = $request->file('image_path')->store('images', 'public');
+            $validated_data['image_path'] = 'storage/' . $path;
         }
 
         Item::create($validated_data);
@@ -106,8 +106,9 @@ class ItemController extends Controller
 
         if ($request->hasFile('image_path') && $request->file('image_path')->isValid()) {
             $filename = time() . '.' . $request->image_path->extension();
-            $path = $request->file('image_path')->move(public_path('images'), $filename);
-            $validated_data['image_path'] = 'images/' . $filename;
+            $path = $request->file('image_path')->store('images', 'public');
+            $validated_data['image_path'] = 'storage/' . $path;
+
         }
 
         $item->update($validated_data);
