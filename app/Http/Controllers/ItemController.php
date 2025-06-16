@@ -57,19 +57,16 @@ class ItemController extends Controller
         ]);
 
         if ($request->hasFile('image_path') && $request->file('image_path')->isValid()) {
-            try {
-                $coludinaryImage = $request->file('image_path')->storeOnCloudinary('items');
-                $url = $coludinaryImage->getSecurePath();
-                $validated_data['image_path'] = $url;
-            } catch (\Exception $e) {
-                return back()->withErrors(['image_path' => 'Image upload failed: ' . $e->getMessage()]);
-            }
+            $filename = time() . '.' . $request->image_path->extension();
+            $path = $request->file('image_path')->move(public_path('images'), $filename);
+            $validated_data['image_path'] = 'images/' . $filename;
         }
 
         Item::create($validated_data);
 
         return redirect()->back()->with('message', 'Item added successfully!');
     }
+
 
 
 
@@ -108,14 +105,16 @@ class ItemController extends Controller
         $item = Item::findOrFail($id);
 
         if ($request->hasFile('image_path') && $request->file('image_path')->isValid()) {
-            $uploadedFileUrl = Cloudinary::upload($request->file('image_path')->getRealPath())->getSecurePath();
-            $validated_data['image_path'] = $uploadedFileUrl;
+            $filename = time() . '.' . $request->image_path->extension();
+            $path = $request->file('image_path')->move(public_path('images'), $filename);
+            $validated_data['image_path'] = 'images/' . $filename;
         }
 
-        $item->update($validated_data); 
+        $item->update($validated_data);
 
         return redirect()->route('items.index')->with('message', 'Item updated successfully!');
     }
+
 
 
 
