@@ -21,7 +21,7 @@
             </a>
         </div>
         <div class="col-md-4 col-sm-6">
-            <a href="{{ route('#') }}" class="text-decoration-none text-dark">
+            <a href="{{ route('customers.index') }}" class="text-decoration-none text-dark">
                 <div class="card info-card bg-light hover-shadow">
                     <div class="card-body d-flex align-items-center">
                         <div class="info-icon bg-success me-3 text-white p-3 rounded-circle">

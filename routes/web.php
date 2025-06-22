@@ -1,7 +1,7 @@
 <?php
 
 use App\Http\Controllers\HomeController;
-use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CustomerController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ItemController;
 use App\Http\Controllers\OrdersController;
@@ -51,6 +51,8 @@ Route::get('/order/{id}/invoice', [OrdersController::class, 'showInvoice'])->nam
 Route::get('/category', [CategoryController::class, 'index'])->name('category.index');
 Route::post('/category', [CategoryController::class, 'store'])->name('category.store');
 Route::delete('/category/{category}', [CategoryController::class, 'destroy'])->name('category.destroy');
+
+Route::get('/customers', [CustomerController::class, 'index'])->name('customers.index');
 
 Route::get('/report/inventoryreport', [ReportController::class, 'index'])->name('report.inventoryreport.index');
 Route::get('/report/inventoryreport/generateReport', [ReportController::class, 'generateReport'])->name('report.inventoryreport.generateReport');
