@@ -5,51 +5,51 @@
     <h4 class="mb-4">Dashboard Overview</h4>
     <div class="row g-3">
 
-        <!-- Total Orders -->
         <div class="col-md-4 col-sm-6">
-            <div class="card info-card bg-light">
-                <div class="card-body d-flex align-items-center">
-                    <div class="info-icon bg-primary me-3 text-white p-3 rounded-circle">
-                        <i class="fas fa-shopping-cart"></i>
-                    </div>
-                    <div>
-                        <h6 class="mb-1">Total Orders</h6>
-                        <span class="fw-bold">{{ $totalOrders }}</span>
+            <a href="{{ route('order.index') }}" class="text-decoration-none text-dark">
+                <div class="card info-card bg-light hover-shadow">
+                    <div class="card-body d-flex align-items-center">
+                        <div class="info-icon bg-primary me-3 text-white p-3 rounded-circle">
+                            <i class="fas fa-shopping-cart"></i>
+                        </div>
+                        <div>
+                            <h6 class="mb-1">Total Orders</h6>
+                            <span class="fw-bold">{{ $totalOrders }}</span>
+                        </div>
                     </div>
                 </div>
-            </div>
+            </a>
         </div>
-
-        <!-- Total Customers -->
         <div class="col-md-4 col-sm-6">
-            <div class="card info-card bg-light">
-                <div class="card-body d-flex align-items-center">
-                    <div class="info-icon bg-success me-3 text-white p-3 rounded-circle">
-                        <i class="fas fa-users"></i>
-                    </div>
-                    <div>
-                        <h6 class="mb-1">Total Customers</h6>
-                        <span class="fw-bold">{{ $totalCustomers }}</span>
+            <a href="{{ route('#') }}" class="text-decoration-none text-dark">
+                <div class="card info-card bg-light hover-shadow">
+                    <div class="card-body d-flex align-items-center">
+                        <div class="info-icon bg-success me-3 text-white p-3 rounded-circle">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <div>
+                            <h6 class="mb-1">Total Customers</h6>
+                            <span class="fw-bold">{{ $totalCustomers }}</span>
+                        </div>
                     </div>
                 </div>
-            </div>
+            </a>
         </div>
-
-        <!-- Total Products -->
         <div class="col-md-4 col-sm-6">
-            <div class="card info-card bg-light">
-                <div class="card-body d-flex align-items-center">
-                    <div class="info-icon bg-warning me-3 text-white p-3 rounded-circle">
-                        <i class="fas fa-box"></i>
-                    </div>
-                    <div>
-                        <h6 class="mb-1">Total Products</h6>
-                        <span class="fw-bold">{{ $totalProducts }}</span>
+            <a href="{{ route('items.index') }}" class="text-decoration-none text-dark">
+                <div class="card info-card bg-light hover-shadow">
+                    <div class="card-body d-flex align-items-center">
+                        <div class="info-icon bg-warning me-3 text-white p-3 rounded-circle">
+                            <i class="fas fa-box"></i>
+                        </div>
+                        <div>
+                            <h6 class="mb-1">Total Products</h6>
+                            <span class="fw-bold">{{ $totalProducts }}</span>
+                        </div>
                     </div>
                 </div>
-            </div>
+            </a>
         </div>
-
     </div>
     <div class="grid grid-cols-3 gap-4 text-sm mb-4">
         <div class="bg-yellow-100 mb-2 p-3 rounded shadow">Preparing: {{ $stats['preparing'] }}</div>
@@ -57,7 +57,6 @@
         <div class="bg-purple-100 p-3 mb-2 rounded shadow">Pickup Ready: {{ $stats['pickup_ready'] }}</div>
     </div>
     <div class="row mt-4">
-        <!-- Recently Added Products -->
         <div class="col-md-6">
             <div class="card mb-4">
                 <div class="card-header">Recently Added Products</div>
@@ -73,8 +72,6 @@
                 </div>
             </div>
         </div>
-
-        <!-- Sales Chart -->
         <div class="col-md-6">
             <div class="card card-info mb-4">
                 <div class="card-header">

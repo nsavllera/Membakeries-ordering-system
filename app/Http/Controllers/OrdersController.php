@@ -13,18 +13,26 @@ class OrdersController extends Controller
    public function index(Request $request)
     {
         $status = $request->input('status');
+        $search = $request->input('search');
 
         $query = Orders::with(['user', 'items.product', 'delivery'])
             ->leftJoin('deliveries', 'orders.delivery_id', '=', 'deliveries.id')
             ->when($status, fn($q) => $q->where('orders.status', $status))
+            ->when($search, function ($q) use ($search) {
+                $q->where(function ($query) use ($search) {
+                    $query->where('orders.id', 'like', "%{$search}%")
+                        ->orWhereHas('user', fn($u) => $u->where('name', 'like', "%{$search}%"));
+                });
+            })
             ->orderByRaw("FIELD(orders.status, 'preparing', 'on delivery', 'can be pickuped', 'delivered', 'canceled')")
             ->orderBy('deliveries.delivery_datetime', 'asc')
-            ->select('orders.*'); // Important: prevent column conflicts
+            ->select('orders.*'); // Prevent column name conflicts due to join
 
         $orders = $query->simplePaginate(5);
 
-        return view('order.index', compact('orders', 'status'));
+        return view('order.index', compact('orders', 'status', 'search'));
     }
+
 
 
 

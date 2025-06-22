@@ -44,7 +44,18 @@
             </div>
         </div>
     </div>
-
+    <div class="mb-4">
+      <form action="{{ route('order.index') }}" method="GET" class="d-flex flex-wrap gap-2">
+        <input 
+          type="text" 
+          name="search" 
+          class="form-control w-auto" 
+          placeholder="Search by Order ID or Customer Name..." 
+          value="{{ request('search') }}"
+        >
+        <button type="submit" class="btn btn-outline-primary">Search</button>
+      </form>
+    </div>
 <div class="flex justify-center">
   <div class="overflow-x-auto bg-white rounded shadow">
     <table class="min-w-full divide-y divide-gray-200 text-sm overflow-visible">
@@ -86,7 +97,7 @@
           <td class="px-4 py-2">
             <a href="{{ route('orders.invoice', $order->id) }}" class="text-blue-600 hover:underline">Details</a>
           </td>
-          <td class="px-5 py-3 w-60 relative">
+          <td class="px-1 py-2 w-60 relative">
             <div class="dropdown-wrapper">
                 <button class="dropdown-button">{{ ucfirst($order->status) }}</button>
                 <button class="dropdown-toggle-button">▾</button>
@@ -105,7 +116,7 @@
                         @csrf
                         @method('POST')
                         <input type="hidden" name="status" value="{{ $stats }}">
-                        <button type="submit" class="dropdwn-item {{ $order->status == $stats ? 'active' : '' }}">
+                        <button type="submit" class="dropdown-item {{ $order->status == $stats ? 'active' : '' }}">
                             {{ ucfirst($stats) }}
                         </button>
                     </form>
