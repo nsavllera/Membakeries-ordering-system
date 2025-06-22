@@ -11,11 +11,10 @@ class ReviewController extends Controller
     {
         $search = $request->input('search');
 
-        $reviews = Review::with(['user', 'order'])
+        $reviews = Review::query()
             ->when($search, function ($query, $search) {
-                $query->whereHas('user', function ($q) use ($search) {
-                    $q->where('name', 'like', "%$search%");
-                })->orWhere('comment', 'like', "%$search%");
+                $query->where('comment', 'like', "%$search%")
+                      ->orWhere('order_id', 'like', "%$search%");
             })
             ->latest()
             ->paginate(10);
