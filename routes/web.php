@@ -41,22 +41,20 @@ Route::get('/gmail-auth', function () {
     $client->setAccessType('offline');
     $client->setPrompt('select_account consent');
 
-    $tokenPath = storage_path('app/google/token.json');
-
     if (request()->has('code')) {
-        
-        $code = request('code');
-        $token = $client->fetchAccessTokenWithAuthCode($code);
+    $code = request('code');
+    $token = $client->fetchAccessTokenWithAuthCode($code);
 
-        // Save the token to storage
-        if (!is_dir(dirname($tokenPath))) {
-            mkdir(dirname($tokenPath), 0755, true);
-        }
-
-        file_put_contents($tokenPath, json_encode($token));
-
-        return 'Gmail authorization complete. You can now send email.';
+    $tokenPath = storage_path('app/google/token.json');
+    if (!is_dir(dirname($tokenPath))) {
+        mkdir(dirname($tokenPath), 0755, true);
     }
+
+    file_put_contents($tokenPath, json_encode($token));
+
+    return 'Gmail authorization complete. You can now send email.';
+    }
+
 
     // Step 1: Redirect to Google
     $authUrl = $client->createAuthUrl();
