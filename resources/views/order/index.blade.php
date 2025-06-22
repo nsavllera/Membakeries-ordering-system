@@ -12,7 +12,7 @@
                     <h5 class="mb-0"><i class="fas fa-filter me-2"></i> Filter Orders by Status</h5>
                 </div>
                 <div class="card-body p-0">
-                    <ul class="nav nav-tabs flex-wrap border-bottom px-3" id="order-status-tab" role="tablist">
+                    <ul class="nav nav-tabs justify-content-start flex-wrap border-bottom px-3" id="order-status-tab" role="tablist">
                     @php
                         $filters = [
                             '' => 'All',

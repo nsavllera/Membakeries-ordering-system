@@ -5,7 +5,7 @@
     <h2 class="mb-4">Customer Reviews</h2>
 
     <form action="{{ route('reviews.index') }}" method="GET" class="mb-3 justify-content-end d-flex gap-2 flex-wrap">
-        <input type="text" name="search" class="form-control" style="max-width: 300px;" placeholder="Search name or comment..." value="{{ $search }}">
+        <input type="text" name="search" class="form-control" style="max-width: 300px;" placeholder="Search order ID..." value="{{ $search }}">
         <button class="btn btn-primary">Search</button>
     </form>
 
