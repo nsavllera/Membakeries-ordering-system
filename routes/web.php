@@ -13,6 +13,7 @@ use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\GmailServices;
 use Illuminate\Auth\Events\Login;
 use Illuminate\Support\Facades\Auth;
+use Google\Client;
 
 /*
 |--------------------------------------------------------------------------
@@ -31,8 +32,35 @@ Route::get('/', function () {
 
 Auth::routes();
 
-Route::get('/gmail-auth', function (GmailServices $gmail) {
-    $gmail->getClient();
+Route::get('/gmail-auth', function () {
+    $client = new Client();
+    $client->setClientId(env('GOOGLE_CLIENT_ID'));
+    $client->setClientSecret(env('GOOGLE_CLIENT_SECRET'));
+    $client->setRedirectUri(env('GOOGLE_REDIRECT_URI'));
+    $client->addScope(Google\Service\Gmail::GMAIL_SEND);
+    $client->setAccessType('offline');
+    $client->setPrompt('select_account consent');
+
+    $tokenPath = storage_path('app/google/token.json');
+
+    if (request()->has('code')) {
+        
+        $code = request('code');
+        $token = $client->fetchAccessTokenWithAuthCode($code);
+
+        // Save the token to storage
+        if (!is_dir(dirname($tokenPath))) {
+            mkdir(dirname($tokenPath), 0755, true);
+        }
+
+        file_put_contents($tokenPath, json_encode($token));
+
+        return 'Gmail authorization complete. You can now send email.';
+    }
+
+    // Step 1: Redirect to Google
+    $authUrl = $client->createAuthUrl();
+    return redirect($authUrl);
 });
 
 Route::get('/gmail-test', function (GmailServices $gmail) {
