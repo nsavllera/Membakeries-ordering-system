@@ -5,13 +5,13 @@ namespace App\Http\Controllers;
 use App\Models\Orders;
 use Illuminate\Http\Request;
 use App\Events\NewOrderCreated;
-use App\Services\GoogleServices;
+use App\Services\GmailServices;
 class OrdersController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request, GoogleServices $gmail)
+    public function index(Request $request, GmailServices $gmail)
     {
         $status = $request->input('status');
         $search = $request->input('search');
