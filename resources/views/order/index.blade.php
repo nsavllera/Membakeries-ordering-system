@@ -11,43 +11,45 @@
                 <div class="card-header text-brown rounded-top">
                     <h5 class="mb-0"><i class="fas fa-filter me-2"></i> Filter Orders by Status</h5>
                 </div>
-                <div class="d-flex flex-wrap justify-content-between align-items-center px-3 border-bottom gap-2">
-                  <ul class="nav nav-tabs border-0" id="order-status-tab" role="tablist">
-                      @php
-                          $filters = [
-                              '' => 'All',
-                              'preparing' => 'Preparing',
-                              'on delivery' => 'On Delivery',
-                              'can be pickuped' => 'Can Be Picked Up',
-                              'delivered' => 'Delivered',
-                              'canceled' => 'Canceled'
-                          ];
-                          $activeStatus = request('status');
-                      @endphp
-                      @foreach($filters as $key => $label)
-                      <li class="nav-item mb-2 me-2 mt-2" role="presentation">
-                          <a 
-                              class="nav-link rounded-pill px-4 py-2 {{ $activeStatus === $key ? 'active bg-brown text-brown' : 'text-brown' }}" 
-                              href="{{ route('order.index', ['status' => $key]) }}"
-                              style="transition: all 0.2s ease-in-out;"
+                <div class="card-body p-0">
+                    <ul class="nav nav-tabs justify-content-start flex-wrap border-bottom px-2" id="order-status-tab" role="tablist">
+                    @php
+                        $filters = [
+                            '' => 'All',
+                            'preparing' => 'Preparing',
+                            'on delivery' => 'On Delivery',
+                            'can be pickuped' => 'Can Be Picked Up',
+                            'delivered' => 'Delivered',
+                            'canceled' => 'Canceled'
+                        ];
+                        $activeStatus = request('status');
+                    @endphp
+                    @foreach($filters as $key => $label)
+                        <li class="nav-item mb-2 mt-2" role="presentation">
+                            <a 
+                                class="nav-link rounded-pill px-4 py-2 {{ $activeStatus === $key ? 'active bg-brown text-brown' : 'text-brown' }}" 
+                                href="{{ route('order.index', ['status' => $key]) }}"
+                                style="transition: all 0.2s ease-in-out;"
+                            >
+                                {{ $label }}
+                            </a>
+                        </li>
+                    @endforeach
+                     <div class="mt-2 mb-1">
+                        <form action="{{ route('order.index') }}" method="GET" class="d-flex justify-content-end flex-wrap gap-2">
+                          <input 
+                            type="text" 
+                            name="search" 
+                            class="form-control w-auto" 
+                            placeholder="Search by Order ID or Customer Name..." 
+                            value="{{ request('search') }}"
+                            
                           >
-                              {{ $label }}
-                          </a>
-                      </li>
-                      @endforeach
-                  </ul>
-
-                  <form action="{{ route('order.index') }}" method="GET" class="d-flex flex-wrap gap-2 align-items-center mb-2 mt-2">
-                      <input 
-                          type="text" 
-                          name="search" 
-                          class="form-control" 
-                          placeholder="Search by Order ID or Customer Name..." 
-                          value="{{ request('search') }}"
-                      >
-                      <button type="submit" class="btn btn-primary">Search</button>
-                  </form>
-              </div>
+                          <button type="submit" class="btn btn-primary">Search</button>
+                        </form>
+                      </div>
+                    </ul>
+                </div>
             </div>
         </div>
     </div>
