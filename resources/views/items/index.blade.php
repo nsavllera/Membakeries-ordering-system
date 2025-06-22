@@ -14,19 +14,20 @@
 		</div>
 		@endif
 
-		<div class="d-flex flex-row-reverse py-2 gap-2 flex-wrap">
-			<form action="{{ route('items.index') }}" method="GET" class="d-flex flex-wrap align-items-center">
+		<div class="d-flex justify-content-end py-2 gap-2">
+			<form action="{{ route('items.index') }}" method="GET" class="d-flex align-items-center gap-2">
 				<input 
-                    type="text" 
-                    name="search" 
-                    class="form-control me-2 mb-2 mb-sm-0" 
-                    placeholder="Search..." 
-                    value="{{ request('search') }}"
-                    style="min-width: 200px"
-                >
-				<button type="submit" class="btn btn-primary">Search</button>
+					type="text" 
+					name="search" 
+					class="form-control mb-2" 
+					placeholder="Search..." 
+					value="{{ request('search') }}"
+					style="min-width: 100px;"
+				>
+				<button type="submit" class="btn btn-primary mb-2">Search</button>
 			</form>
 		</div>
+
 
 		<div class="table-responsive">
 			<table class="table table-bordered align-middle text-nowrap">

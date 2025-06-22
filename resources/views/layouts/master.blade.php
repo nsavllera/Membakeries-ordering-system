@@ -285,19 +285,19 @@
 
                     <!-- Right Side Of Navbar -->
                     <ul class="navbar-nav ms-auto align-items-center">
+                        @php
+                            $unreadCount = \App\Models\Message::whereNull('reply')->count();
+                        @endphp
 
-                        <!-- Notification Icon -->
-                        <li class="nav-item me-3" style="position: relative; cursor: pointer;" id="notification-icon">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-700" fill="none" viewBox="0 0 24 24"
-                                stroke="black" width="24" height="24" style="stroke: black;">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6 6 0 10-12 0v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
-                            </svg>
-
-                            <span id="notification-count"
-                                style="display: none; position: absolute; top: -6px; right: -6px; background: red; color: white; border-radius: 50%; padding: 0 6px; font-size: 12px; font-weight: bold;">
-                                0
-                            </span>
+                        <li class="nav-item position-relative">
+                            <a class="nav-link" href="{{ route('message.index') }}">
+                                <i class="fas fa-inbox"></i> Inbox
+                                @if($unreadCount > 0)
+                                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                                        {{ $unreadCount }}
+                                    </span>
+                                @endif
+                            </a>
                         </li>
 
                         <!-- Authentication Links -->
@@ -344,6 +344,7 @@
                 <div class="row">
                     <div class="col-md-2">
                         <a href="{{ route('home')}}" class="btn btn-primary w-100 mb-2">Dashboard</a>
+                        <a href="{{ route('customers.index')}}" class="btn btn-primary w-100 mb-2">Manage Customer</a>
                         <a href="{{ route('category.index')}}" class ="btn btn-primary w-100 mb-2">Manage Category</a>
                         <a href="{{ route('items.index') }}" class="btn btn-primary w-100 mb-2">Manage Catalogue</a>
                         <a href="{{ route('order.index')}}" class="btn btn-primary w-100 mb-2">Order List</a>

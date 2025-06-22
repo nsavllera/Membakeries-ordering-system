@@ -4,11 +4,7 @@
 <div class="p-6 bg-gray-50 min-h-screen">
   <div class="flex justify-between items-center mb-6">
     <h2 class="text-xl font-semibold text-gray-800">Order List</h2>
-    <div>
-      <a href="#" class="px-3 py-2 bg-blue-600 text-white rounded text-sm">Export</a>
-    </div>
   </div>
-
   <div class="row mb-2">
         <div class="col-12">
             <div class="card shadow-sm border-0 rounded-3">
@@ -29,7 +25,7 @@
                         $activeStatus = request('status');
                     @endphp
                     @foreach($filters as $key => $label)
-                        <li class="nav-item mb-2 me-2" role="presentation">
+                        <li class="nav-item mb-2 me-2 mt-2" role="presentation">
                             <a 
                                 class="nav-link rounded-pill px-4 py-2 {{ $activeStatus === $key ? 'active bg-brown text-brown' : 'text-brown' }}" 
                                 href="{{ route('order.index', ['status' => $key]) }}"
@@ -39,22 +35,23 @@
                             </a>
                         </li>
                     @endforeach
+                     <div class="mt-2 mb-1">
+                        <form action="{{ route('order.index') }}" method="GET" class="d-flex justify-content-end flex-wrap gap-2">
+                          <input 
+                            type="text" 
+                            name="search" 
+                            class="form-control w-auto" 
+                            placeholder="Search by Order ID or Customer Name..." 
+                            value="{{ request('search') }}"
+                            
+                          >
+                          <button type="submit" class="btn btn-primary">Search</button>
+                        </form>
+                      </div>
                     </ul>
                 </div>
             </div>
         </div>
-    </div>
-    <div class="mb-4">
-      <form action="{{ route('order.index') }}" method="GET" class="d-flex flex-wrap gap-2">
-        <input 
-          type="text" 
-          name="search" 
-          class="form-control w-auto" 
-          placeholder="Search by Order ID or Customer Name..." 
-          value="{{ request('search') }}"
-        >
-        <button type="submit" class="btn btn-outline-primary">Search</button>
-      </form>
     </div>
 <div class="flex justify-center">
   <div class="overflow-x-auto bg-white rounded shadow">
@@ -68,12 +65,12 @@
           <th class="px-4 py-2 text-left">Status</th>
           <th class="px-4 py-2 text-left">Total</th>
           <th class="px-4 py-2 text-left">More</th>
-          <th class="px-4 py-2 text-left w-60">Actions</th>
+          <th class="px-2 py-2 text-left w-60">Actions</th>
         </tr>
       </thead>
       <tbody>
         @forelse($orders as $order)
-        <tr class="border-b overflow-visible"">
+        <tr class="border-b overflow-visible">
           <td class="px-4 py-2 font-medium text-gray-800">#{{ $order->id }}</td>
           <td class="px-4 py-2">{{ $order->created_at->format('d M Y H:i') }}</td>
           <td class="px-4 py-2">
@@ -97,7 +94,7 @@
           <td class="px-4 py-2">
             <a href="{{ route('orders.invoice', $order->id) }}" class="text-blue-600 hover:underline">Details</a>
           </td>
-          <td class="px-1 py-2 w-60 relative">
+          <td class="px-2 py-2 w-60 relative">
             <div class="dropdown-wrapper">
                 <button class="dropdown-button">{{ ucfirst($order->status) }}</button>
                 <button class="dropdown-toggle-button">▾</button>

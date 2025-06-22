@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\HomeController;
+use App\Http\Controllers\MessageController;
 use App\Http\Controllers\CustomerController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ItemController;
@@ -53,6 +53,11 @@ Route::post('/category', [CategoryController::class, 'store'])->name('category.s
 Route::delete('/category/{category}', [CategoryController::class, 'destroy'])->name('category.destroy');
 
 Route::get('/customers', [CustomerController::class, 'index'])->name('customers.index');
+Route::put('/customers/{id}/ban', [CustomerController::class, 'ban'])->name('customers.ban');
+
+Route::get('/message', [MessageController::class, 'index'])->name('message.index');
+Route::post('/message/{id}/reply', [MessageController::class, 'reply'])->name('message.reply');
+
 
 Route::get('/report/inventoryreport', [ReportController::class, 'index'])->name('report.inventoryreport.index');
 Route::get('/report/inventoryreport/generateReport', [ReportController::class, 'generateReport'])->name('report.inventoryreport.generateReport');

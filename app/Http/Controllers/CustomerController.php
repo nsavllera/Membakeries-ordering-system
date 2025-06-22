@@ -17,9 +17,18 @@ class CustomerController extends Controller
                 $q->where('name', 'like', "%{$search}%")
                   ->orWhere('email', 'like', "%{$search}%")
             )
-            ->orderBy('created_at', 'desc')
             ->paginate(10);
 
         return view('customers.index', compact('customers', 'search'));
     }
+
+    public function ban($id)
+    {
+        $user = User::findOrFail($id);
+        $user->is_banned = true;
+        $user->save();
+
+        return back()->with('message', 'Customer has been banned successfully.');
+    }
+
 }
