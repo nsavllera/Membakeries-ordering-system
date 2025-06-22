@@ -84,8 +84,9 @@ class OrdersController extends Controller
 
         try {
                 $gmail = new GmailServices();
+                $adminEmail = env('ADMIN_EMAIL');
                 $gmail->sendEmail(
-                    'nsavllera@gmail.com',
+                    $adminEmail,
                     '📦 New Order Received',
                     "
                     <div style='font-family: Arial, sans-serif; padding: 20px; max-width: 600px; border: 1px solid #ccc; border-radius: 10px; background: #f9f9f9;'>

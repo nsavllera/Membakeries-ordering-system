@@ -37,9 +37,9 @@ class ReviewController extends Controller
             'rating' => $validated['rating'],
             'comment' => $validated['comment'],
         ]);
-
+        $adminEmail = env('ADMIN_EMAIL');
         $gmail->sendEmail(
-            'nsavllera@gmail.com', 
+            $adminEmail, 
             'New Review Received',
             "<p>Review for Order #{$review->order_id}:</p><p><strong>Rating:</strong> {$review->rating}</p><p>{$review->comment}</p>"
         );

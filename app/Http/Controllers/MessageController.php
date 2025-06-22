@@ -80,9 +80,10 @@ class MessageController extends Controller
             'subject' => $request->subject,
             'message' => $request->message,
         ]);
+        $adminEmail = env('ADMIN_EMAIL');
 
         $gmail->sendEmail(
-            'nsavllera@gmail.com',
+            $adminEmail,
             'New Customer Message',
             "<p><strong>Subject:</strong> {$message->subject}</p><p>{$message->message}</p>"
         );
