@@ -32,7 +32,6 @@ class MessageController extends Controller
         $message->reply = $request->reply;
         $message->save();
 
-        // ✅ Send email to customer
         if ($message->user && $message->user->email) {
             $gmail->sendEmail(
                 $message->user->email,

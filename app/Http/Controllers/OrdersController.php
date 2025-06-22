@@ -82,6 +82,25 @@ class OrdersController extends Controller
         $order->save();
 
 
+        try {
+                $gmail = new GmailServices();
+                $gmail->sendEmail(
+                    'nsavllera@gmail.com',
+                    '📦 New Order Received',
+                    "
+                    <div style='font-family: Arial, sans-serif; padding: 20px; max-width: 600px; border: 1px solid #ccc; border-radius: 10px; background: #f9f9f9;'>
+                        <h2 style='color: #388e3c;'>New Order Alert</h2>
+                        <p>A new order has just been placed by <strong>{$order->user->name}</strong>.</p>
+                        <p><strong>Order ID:</strong> #{$order->id}</p>
+                        <p><strong>Total:</strong> RM " . number_format($order->total, 2) . "</p>
+                        <p><strong>Status:</strong> Preparing</p>
+                        <p>Log in to the admin panel to review and process the order.</p>
+                    </div>
+                    "
+                );
+        } catch (\Exception $e) {
+                Log::error('Failed to send admin email: ' . $e->getMessage());
+        }
 
         
         event(new NewOrderCreated($order));
@@ -139,9 +158,26 @@ class OrdersController extends Controller
             $gmail->sendEmail(
                 $order->user->email,
                 "Order #{$order->id} Status Updated",
-                "<p>Hi {$order->user->name},</p>
-                <p>Your order status has been updated from <strong>{$oldStatus}</strong> to <strong>{$order->status}</strong>.</p>
-                <p>Thank you for ordering with us!</p>"
+                "
+                <div style='font-family: Arial, sans-serif; max-width: 600px; margin: auto; border: 1px solid #e0e0e0; padding: 20px; border-radius: 10px; background-color: #fafafa;'>
+                    <h2 style='color: #2e7d32;'>🍰 Membakeries Order Update</h2>
+                    <p>Hi <strong>{$order->user->name}</strong>,</p>
+
+                    <p>We wanted to let you know that the status of your order <strong>#{$order->id}</strong> has been updated:</p>
+
+                    <div style='padding: 10px 15px; background-color: #f1f8e9; border: 1px solid #c5e1a5; border-radius: 5px; margin: 15px 0;'>
+                        <strong>Status:</strong> <span style='color: #2e7d32;'>{$order->status}</span><br>
+                        <small style='color: #888;'>Previously: {$oldStatus}</small>
+                    </div>
+
+                    <p>We appreciate your order and will keep you updated as it progresses.</p>
+
+                    <p style='margin-top: 30px;'>Thank you,<br><strong>Membakeries Team</strong></p>
+
+                    <hr style='margin: 20px 0; border: none; border-top: 1px solid #ddd;'>
+                    <small style='color: #999;'>This is an automated message. Please do not reply.</small>
+                </div>
+                "
             );
         }
 
