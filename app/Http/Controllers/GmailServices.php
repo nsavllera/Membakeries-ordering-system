@@ -1,6 +1,6 @@
 <?
 
-namespace App\Services;
+namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use Google\Service\Gmail\Message;
 use Google\Client;

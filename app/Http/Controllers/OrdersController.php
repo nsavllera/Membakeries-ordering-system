@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Orders;
 use Illuminate\Http\Request;
 use App\Events\NewOrderCreated;
-use App\Services\GmailServices;
+use App\Http\Controllers\GmailServices;
 class OrdersController extends Controller
 {
     /**
