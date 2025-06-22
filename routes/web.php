@@ -10,6 +10,7 @@ use App\Http\Controllers\ReportController;
 use App\Http\Controllers\OrderReportController;
 use App\Http\Controllers\SalesReportController;
 use App\Http\Controllers\ReviewController;
+use App\Http\Controllers\GmailServices;
 use Illuminate\Auth\Events\Login;
 use Illuminate\Support\Facades\Auth;
 
@@ -29,6 +30,14 @@ Route::get('/', function () {
 });
 
 Auth::routes();
+
+Route::get('/gmail-auth', function (GmailServices $gmail) {
+    $gmail->getClient();
+});
+
+Route::get('/gmail-test', function (GmailServices $gmail) {
+    $gmail->sendEmail('nsavllera@gmail.com', 'Test Subject', '<p>Hello from Laravel Gmail API!</p>');
+});
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
