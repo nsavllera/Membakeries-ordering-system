@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Orders;
 use Illuminate\Http\Request;
+use \Illuminate\Support\Facades\Log;
 use App\Events\NewOrderCreated;
 use App\Http\Controllers\GmailServices;
 class OrdersController extends Controller
@@ -134,6 +135,7 @@ class OrdersController extends Controller
         $order->save();
 
         if ($order->user && $order->user->email) {
+            Log::info("Sending Gmail to: $order->user");
             $gmail->sendEmail(
                 $order->user->email,
                 "Order #{$order->id} Status Updated",
