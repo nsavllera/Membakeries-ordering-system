@@ -22,20 +22,18 @@ class GmailServices extends Controller
         $client->setAccessType('offline');
         $client->setPrompt('select_account consent');
 
-        $tokenPath = storage_path('app/google/token.json');
-
-        if (file_exists($tokenPath)) {
-            $accessToken = json_decode(file_get_contents($tokenPath), true);
+         $envToken = env('GOOGLE_ACCESS_TOKEN');
+        if ($envToken) {
+            $accessToken = json_decode($envToken, true);
             $client->setAccessToken($accessToken);
-        }
 
-        if ($client->isAccessTokenExpired()) {
-            if ($client->getRefreshToken()) {
-                $client->fetchAccessTokenWithRefreshToken($client->getRefreshToken());
-                file_put_contents($tokenPath, json_encode($client->getAccessToken()));
-            } else {
-                $authUrl = $client->createAuthUrl();
-                exit("Please authorize Gmail access: <a href='$authUrl'>$authUrl</a>");
+            if ($client->isAccessTokenExpired()) {
+                if ($client->getRefreshToken()) {
+                    $client->fetchAccessTokenWithRefreshToken($client->getRefreshToken());
+
+                
+                    Log::info('New Gmail token generated:', $client->getAccessToken());
+                }
             }
         }
 

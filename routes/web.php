@@ -39,7 +39,7 @@ Route::get('/gmail-auth', function () {
     $client->setRedirectUri(env('GOOGLE_REDIRECT_URI'));
     $client->addScope(Google\Service\Gmail::GMAIL_SEND);
     $client->setAccessType('offline');
-    $client->setPrompt('select_account consent');
+    $client->setPrompt('consent');
 
     if (request()->has('code')) {
     $code = request('code');
