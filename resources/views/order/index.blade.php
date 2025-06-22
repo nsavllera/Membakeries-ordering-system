@@ -53,9 +53,9 @@
             </div>
         </div>
     </div>
-<div class="flex justify-center">
-  <div class="overflow-x-auto bg-white rounded shadow">
-    <table class="min-w-full divide-y divide-gray-200 text-sm overflow-visible">
+<div class="table-responsive" style="overflow: visible;">
+  <div class="bg-white rounded shadow">
+    <table class="table table-hover text-sm align-middle">
       <thead class="bg-gray-100">
         <tr>
           <th class="px-4 py-2 text-left">Order #</th>
@@ -94,7 +94,7 @@
           <td class="px-4 py-2">
             <a href="{{ route('orders.invoice', $order->id) }}" class="text-blue-600 hover:underline">Details</a>
           </td>
-          <td class="px-2 py-2 w-60 relative">
+          <td class="px-2 py-2 w-60 position-relative" style="overflow: visible;">
             <div class="dropdown-wrapper">
                 <button class="dropdown-button">{{ ucfirst($order->status) }}</button>
                 <button class="dropdown-toggle-button">▾</button>
