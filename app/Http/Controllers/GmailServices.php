@@ -13,7 +13,7 @@ class GmailServices extends Controller
     public function getClient(): Gmail
     {
         $client = new Client();
-        $client->setAuthConfig(storage_path('app/google/client_secret_851542435387-u3jnsbph4rrhe726pt9ir10b7ip466mv.apps.googleusercontent.com.json'));
+        $client->setAuthConfig(storage_path('app/google/credential.json'));
         $client->addScope(Gmail::GMAIL_SEND);
         $client->setAccessType('offline');
         $client->setPrompt('select_account consent');
