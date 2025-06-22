@@ -121,18 +121,31 @@ class OrdersController extends Controller
         //
     }
 
-   public function updateStatus(Request $request, $orderId)
+
+    public function updateStatus(Request $request, $orderId, GmailServices $gmail)
     {
         $validated = $request->validate([
             'status' => 'required|in:preparing,on delivery,can be pickuped,delivered,canceled',
         ]);
 
-        $order = Orders::findOrFail($orderId);
+        $order = Orders::with('user')->findOrFail($orderId);
+        $oldStatus = $order->status;
         $order->status = $validated['status'];
         $order->save();
 
-        return redirect()->route('order.index')->with('message', 'Order status updated successfully!');
+        if ($order->user && $order->user->email) {
+            $gmail->sendEmail(
+                $order->user->email,
+                "Order #{$order->id} Status Updated",
+                "<p>Hi {$order->user->name},</p>
+                <p>Your order status has been updated from <strong>{$oldStatus}</strong> to <strong>{$order->status}</strong>.</p>
+                <p>Thank you for ordering with us!</p>"
+            );
+        }
+
+        return redirect()->route('order.index')->with('message', 'Order status updated and email sent!');
     }
+
 
     public function checkNewOrders(Request $request)
     {

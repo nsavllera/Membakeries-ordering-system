@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Review;
+use App\Http\Controllers\GmailServices;
 
 class ReviewController extends Controller
 {
@@ -21,4 +22,29 @@ class ReviewController extends Controller
 
         return view('reviews.index', compact('reviews', 'search'));
     }
+
+
+    public function store(Request $request, GmailServices $gmail)
+    {
+        $validated = $request->validate([
+            'order_id' => 'required|exists:orders,id',
+            'rating' => 'required|integer|min:1|max:5',
+            'comment' => 'required|string|max:1000',
+        ]);
+
+        $review = Review::create([
+            'order_id' => $validated['order_id'],
+            'rating' => $validated['rating'],
+            'comment' => $validated['comment'],
+        ]);
+
+        $gmail->sendEmail(
+            'nsavllera@gmail.com', 
+            'New Review Received',
+            "<p>Review for Order #{$review->order_id}:</p><p><strong>Rating:</strong> {$review->rating}</p><p>{$review->comment}</p>"
+        );
+
+        return redirect()->back()->with('message', 'Thank you for your review!');
+    }
+
 }
