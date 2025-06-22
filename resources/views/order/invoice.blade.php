@@ -42,13 +42,19 @@
             @endif
           </div>
 
+
           <!-- Custom Image -->
           <div class="col-4">
-            @if (!empty($item->custom_details['image_path']))
-              <a 
-                href="https://membakeriesapi-production.up.railway.app/resources/images/{{ $item->custom_details['image_path'] }}" 
-                class="btn btn-sm btn-outline-primary" 
-                download>
+            @php
+                $cloudName = 'dnoeu0ewo';
+                $imageFilename = $item->custom_details['image_path']; 
+                $imageUrl = "https://res.cloudinary.com/{$cloudName}/image/upload/{$imageFilename}";
+            @endphp
+
+            @if (!empty($imageFilename))
+              <img src="{{ $imageUrl }}" alt="Custom Cake Design" width="200">
+
+              <a href="{{ $imageUrl }}" class="btn btn-outline-primary" download>
                 Download Image
               </a>
             @else
