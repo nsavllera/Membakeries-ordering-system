@@ -5,12 +5,13 @@ namespace App\Http\Controllers;
 use App\Models\Orders;
 use Illuminate\Http\Request;
 use App\Events\NewOrderCreated;
+use App\Services\GoogleServices;
 class OrdersController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-   public function index(Request $request)
+    public function index(Request $request, GoogleServices $gmail)
     {
         $status = $request->input('status');
         $search = $request->input('search');
@@ -26,9 +27,29 @@ class OrdersController extends Controller
             })
             ->orderByRaw("FIELD(orders.status, 'preparing', 'on delivery', 'can be pickuped', 'delivered', 'canceled')")
             ->orderBy('deliveries.delivery_datetime', 'asc')
-            ->select('orders.*'); // Prevent column name conflicts due to join
+            ->select('orders.*');
 
         $orders = $query->simplePaginate(5);
+
+        // Send email for newly created unnotified orders
+        $unnotifiedOrders = Orders::with('user')
+            ->where('is_notified', false)
+            ->latest()
+            ->get();
+
+        foreach ($unnotifiedOrders as $order) {
+            if ($order->user) {
+                $gmail->sendEmail(
+                    $order->user->email,
+                    'New Order Received',
+                    "<p>Hi {$order->user->name}, your order <strong>#{$order->id}</strong> is being processed.</p>"
+                );
+
+                $order->is_notified = true;
+                $order->save();
+            }
+        }
+
 
         return view('order.index', compact('orders', 'status', 'search'));
     }
@@ -51,7 +72,7 @@ class OrdersController extends Controller
 
     public function store(Request $request)
     {
-        // Save the order (adjust as needed for your logic)
+        
         $order = new Orders();
         $order->user_id = $request->user()->id;
         $order->status = 'preparing';

@@ -21,6 +21,7 @@ return new class extends Migration
             $table->foreign('delivery_id')->references('id')->on('deliveries')->onDelete('cascade');
             $table->unsignedBigInteger('payment_id');
             $table->foreign('payment_id')->references('id')->on('payments')->onDelete('cascade');
+            $table->boolean('is_notified');
             $table->timestamps();
         });
     }
