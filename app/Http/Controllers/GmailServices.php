@@ -12,58 +12,45 @@ class GmailServices extends Controller
 {
     public function getClient(): Gmail
     {
+        $credPath = storage_path('app/google/credential.json');
+
+        
+        if (!file_exists($credPath) && env('GOOGLE_CREDENTIALS_BASE64')) {
+            file_put_contents($credPath, base64_decode(env('GOOGLE_CREDENTIALS_BASE64')));
+        }
+
         $client = new Client();
-        $client->setAuthConfig(storage_path('app/google/credential.json'));
+        $client->setAuthConfig($credPath);
         $client->addScope(Gmail::GMAIL_SEND);
         $client->setAccessType('offline');
         $client->setPrompt('select_account consent');
 
-        // Optionally store token to reuse
+       
         $tokenPath = storage_path('app/google/token.json');
+        if (!file_exists($tokenPath) && env('GOOGLE_TOKEN_BASE64')) {
+            file_put_contents($tokenPath, base64_decode(env('GOOGLE_TOKEN_BASE64')));
+        }
+
+        
         if (file_exists($tokenPath)) {
             $accessToken = json_decode(file_get_contents($tokenPath), true);
             $client->setAccessToken($accessToken);
         }
 
+        
         if ($client->isAccessTokenExpired()) {
-            // Only for first-time auth or refresh
             if ($client->getRefreshToken()) {
                 $client->fetchAccessTokenWithRefreshToken($client->getRefreshToken());
+                file_put_contents($tokenPath, json_encode($client->getAccessToken()));
             } else {
-                // Redirect user to authenticate
+                // First time: redirect user to authenticate
                 $authUrl = $client->createAuthUrl();
-                exit("Open the following link in your browser:\n$authUrl\n");
+                exit("Please authorize access: <a href='$authUrl'>$authUrl</a>");
             }
-
-            file_put_contents($tokenPath, json_encode($client->getAccessToken()));
         }
 
         return new Gmail($client);
     }
 
-    
-
-    public function sendEmail($to, $subject, $body)
-    {
-
-        try {
-                $gmail = $this->getClient();
-
-                $strRawMessage = "From: Your Name <your@gmail.com>\r\n";
-                $strRawMessage .= "To: <$to>\r\n";
-                $strRawMessage .= "Subject: $subject\r\n";
-                $strRawMessage .= "MIME-Version: 1.0\r\n";
-                $strRawMessage .= "Content-Type: text/html; charset=utf-8\r\n\r\n";
-                $strRawMessage .= "$body";
-
-                $mime = rtrim(strtr(base64_encode($strRawMessage), '+/', '-_'), '=');
-                $message = new Message();
-                $message->setRaw($mime);
-
-                $gmail->users_messages->send("me", $message);
-            } catch (\Exception $e) {
-                Log::error('Gmail send failed: ' . $e->getMessage());
-            }
-    }
 
 }
