@@ -43,6 +43,23 @@ class GmailServices extends Controller
 
         return new Gmail($client);
     }
+    public function sendEmail($to, $subject, $body)
+    {
+        $gmail = $this->getClient();
+
+        $strRawMessage = "From: Your Name <nsavllera@gmail.com>\r\n";
+        $strRawMessage .= "To: <$to>\r\n";
+        $strRawMessage .= "Subject: $subject\r\n";
+        $strRawMessage .= "MIME-Version: 1.0\r\n";
+        $strRawMessage .= "Content-Type: text/html; charset=utf-8\r\n\r\n";
+        $strRawMessage .= "$body";
+
+        $mime = rtrim(strtr(base64_encode($strRawMessage), '+/', '-_'), '=');
+        $message = new Message();
+        $message->setRaw($mime);
+
+        $gmail->users_messages->send("me", $message);
+    }
 
 
 }
