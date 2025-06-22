@@ -9,6 +9,7 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\OrderReportController;
 use App\Http\Controllers\SalesReportController;
+use App\Http\Controllers\ReviewController;
 use Illuminate\Auth\Events\Login;
 use Illuminate\Support\Facades\Auth;
 
@@ -58,6 +59,7 @@ Route::put('/customers/{id}/ban', [CustomerController::class, 'ban'])->name('cus
 Route::get('/message', [MessageController::class, 'index'])->name('message.index');
 Route::post('/message/{id}/reply', [MessageController::class, 'reply'])->name('message.reply');
 
+Route::get('/reviews', [ReviewController::class, 'index'])->name('reviews.index');
 
 Route::get('/report/inventoryreport', [ReportController::class, 'index'])->name('report.inventoryreport.index');
 Route::get('/report/inventoryreport/generateReport', [ReportController::class, 'generateReport'])->name('report.inventoryreport.generateReport');
