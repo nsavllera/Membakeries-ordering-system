@@ -34,10 +34,14 @@
                     <td>{{ $messages->firstItem() + $index }}</td>
                     <td>{{ $msg->user->name }}<br><small>{{ $msg->user->email }}</small></td>
                     <td>{{ $msg->subject }}</td>
-                    <td>{{ $msg->message }}</td>
+                    <td title="{{ $msg->message }}" style="cursor: help;">
+                        {{ \Illuminate\Support\Str::limit($msg->message, 50) }}
+                    </td>
                     <td>
                         @if($msg->reply)
-                            <span class="text-success">{{ $msg->reply }}</span>
+                            <span class="text-success" title="{{ $msg->reply }}">
+                                {{ \Illuminate\Support\Str::limit($msg->reply, 50) }}
+                            </span>
                         @else
                             <span class="text-muted">No reply</span>
                         @endif
