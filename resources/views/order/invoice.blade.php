@@ -45,20 +45,22 @@
 
           <!-- Custom Image -->
           <div class="col-4">
-            @php
-                $cloudName = 'dnoeu0ewo';
-                $imageFilename = $item->custom_details['image_path']; 
-                $imageUrl = "https://res.cloudinary.com/{$cloudName}/image/upload/{$imageFilename}";
-            @endphp
+            @if (!empty($item->custom_details['image_path']))
+              @php
+                  $cloudName = 'dnoeu0ewo';
+                  $imageFilename = $item->custom_details['image_path']; // e.g. "e2hbwdcwwfrbt8sd32on.png"
+                  $imageUrl = "https://res.cloudinary.com/{$cloudName}/image/upload/{$imageFilename}";
+              @endphp
 
-            @if (!empty($imageFilename))
-              <img src="{{ $imageUrl }}" alt="Custom Cake Design" width="200">
+              @if (!empty($imageFilename))
+                <img src="{{ $imageUrl }}" alt="Custom Cake Design" width="200">
 
-              <a href="{{ $imageUrl }}" class="btn btn-outline-primary" download>
-                Download Image
-              </a>
-            @else
-              <span class="text-muted">No image uploaded</span>
+                <a href="{{ $imageUrl }}" class="btn btn-outline-primary" download>
+                  Download Image
+                </a>
+              @else
+                <span class="text-muted">No image uploaded</span>
+              @endif
             @endif
           </div>
 
