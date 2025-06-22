@@ -13,6 +13,17 @@
                 </div>
                 <div class="d-flex flex-wrap justify-content-between align-items-center px-3 border-bottom gap-2">
                   <ul class="nav nav-tabs border-0" id="order-status-tab" role="tablist">
+                      @php
+                          $filters = [
+                              '' => 'All',
+                              'preparing' => 'Preparing',
+                              'on delivery' => 'On Delivery',
+                              'can be pickuped' => 'Can Be Picked Up',
+                              'delivered' => 'Delivered',
+                              'canceled' => 'Canceled'
+                          ];
+                          $activeStatus = request('status');
+                      @endphp
                       @foreach($filters as $key => $label)
                       <li class="nav-item mb-2 me-2 mt-2" role="presentation">
                           <a 
