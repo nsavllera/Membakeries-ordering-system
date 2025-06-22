@@ -291,7 +291,7 @@
 
                         <li class="nav-item position-relative">
                             <a class="nav-link" href="{{ route('message.index') }}">
-                                <i class="fas fa-inbox"></i> Inbox
+                                <i class="fas fa-inbox"></i>
                                 @if($unreadCount > 0)
                                     <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
                                         {{ $unreadCount }}
